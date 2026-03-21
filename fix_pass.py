@@ -121,33 +121,46 @@ def build_user_prompt(source_code: str, findings: list[dict], source_path: str) 
 # API call
 # ---------------------------------------------------------------------------
 
-def call_claude(system: str, user: str, model: str = "claude-sonnet-4-20250514") -> str:
-    """Call Anthropic API. Returns the text response."""
+def _get_api_key() -> str:
+    """Resolve API key: env var first, then keyring."""
     import os
+    key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
+    if key:
+        return key
+    try:
+        import keyring
+        key = keyring.get_password("openrouter", "api_key")
+        if key:
+            return key
+    except Exception:
+        pass
+    raise RuntimeError(
+        "No API key found. Set OPENROUTER_API_KEY env var or store in keyring:\n"
+        "  keyring set openrouter api_key"
+    )
+
+
+def call_llm(system: str, user: str, model: str = "anthropic/claude-sonnet-4") -> str:
+    """Call OpenRouter API (OpenAI-compatible). Returns the text response."""
     import urllib.request
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise RuntimeError(
-            "ANTHROPIC_API_KEY not set. Export it or pass via env:\n"
-            "  ANTHROPIC_API_KEY=$(secret-tool lookup service anthropic type api-key) "
-            "python fix_pass.py ..."
-        )
+    api_key = _get_api_key()
 
     payload = json.dumps({
         "model": model,
         "max_tokens": 8096,
-        "system": system,
-        "messages": [{"role": "user", "content": user}],
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ],
     }).encode()
 
     req = urllib.request.Request(
-        "https://api.anthropic.com/v1/messages",
+        "https://openrouter.ai/api/v1/chat/completions",
         data=payload,
         headers={
             "Content-Type": "application/json",
-            "anthropic-version": "2023-06-01",
-            "x-api-key": api_key,
+            "Authorization": f"Bearer {api_key}",
         },
         method="POST",
     )
@@ -155,12 +168,12 @@ def call_claude(system: str, user: str, model: str = "claude-sonnet-4-20250514")
     with urllib.request.urlopen(req) as resp:
         data = json.loads(resp.read())
 
-    # Extract text content
-    for block in data.get("content", []):
-        if block.get("type") == "text":
-            return block["text"].strip()
+    # OpenAI-compatible response format
+    choices = data.get("choices", [])
+    if choices:
+        return choices[0]["message"]["content"].strip()
 
-    raise ValueError(f"No text in API response: {data}")
+    raise ValueError(f"No content in API response: {data}")
 
 
 # ---------------------------------------------------------------------------
@@ -265,8 +278,8 @@ def main():
                         help="Print prompt only, do not call API or write files")
     parser.add_argument("--output", "-o", type=Path, default=None,
                         help="Output path for patched file (default: <source>.fixed.py)")
-    parser.add_argument("--model", default="claude-sonnet-4-20250514",
-                        help="Claude model to use")
+    parser.add_argument("--model", default="anthropic/claude-sonnet-4",
+                        help="OpenRouter model ID (default: anthropic/claude-sonnet-4)")
     parser.add_argument("--errors-only", action="store_true", default=True,
                         help="Only fix ERROR findings, skip warnings (default: true)")
 
@@ -324,7 +337,7 @@ def main():
     # --- Call API ---
     print(f"Calling Claude API ({args.model})...", file=sys.stderr)
     try:
-        patched_code = call_claude(SYSTEM_PROMPT, user_prompt, model=args.model)
+        patched_code = call_llm(SYSTEM_PROMPT, user_prompt, model=args.model)
     except Exception as e:
         print(f"API error: {e}", file=sys.stderr)
         sys.exit(1)
