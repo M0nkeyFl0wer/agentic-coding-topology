@@ -437,6 +437,12 @@ class TopologyAnalyzer:
                     g2.number_of_nodes() < self.min_duplicate_size):
                 continue
 
+            # Skip edgeless graphs — two disconnected node sets of the same
+            # size are trivially isomorphic but structurally meaningless.
+            # There's no topology to compare when there are no edges.
+            if g1.number_of_edges() == 0 or g2.number_of_edges() == 0:
+                continue
+
             # Fast filter: degree sequences must match
             if (sorted(d for _, d in g1.degree()) !=
                     sorted(d for _, d in g2.degree())):

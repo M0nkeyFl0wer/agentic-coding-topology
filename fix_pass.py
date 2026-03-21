@@ -61,9 +61,20 @@ Your constraints are strict:
 For each finding type, here is what you should do:
 
 structural_duplication:
-  Two functions are topologically identical (same data flow graph shape).
-  Extract the shared structure into a single helper function that both call.
-  The helper should be named for what it actually does, not what it replaces.
+  Two functions have isomorphic data flow graphs — same operation count,
+  same dependency pattern, same fan-out, just different variable names.
+  The normalized forms will be shown so you can see the shared pattern.
+
+  Your job: extract the common OPERATION SEQUENCE into a new helper function,
+  parameterized by whatever differs between the two callers (e.g. different
+  path construction, different config lookup). Both original functions become
+  thin wrappers that call the helper with their specific parameters.
+
+  Do NOT just rename one function or add a wrapper that delegates unchanged.
+  The helper must capture the shared topology — the repeated steps that make
+  both functions structurally identical. If both functions do "resolve path →
+  load data → validate → return", the helper does exactly that sequence,
+  parameterized by how the path is resolved.
 
 statement_multitask:
   A variable feeds 3+ downstream operations simultaneously — too much fan-out.
@@ -85,6 +96,52 @@ No explanation, no markdown fences, no preamble. Just the code.
 """
 
 
+def _get_normalized_functions(source_path: str) -> dict[str, list[str]]:
+    """Get normalized form of each function for structural duplication context."""
+    try:
+        from agentic_coding_topology.normalizer.python import normalize_file
+        from agentic_coding_topology.graph.builder import build_graphs
+        module = normalize_file(source_path)
+        result = {}
+        for func_name, stmts in module.functions.items():
+            lines = []
+            for s in stmts:
+                marker = " [intermediate]" if s.is_intermediate else ""
+                lines.append(f"  {s.var_name} = {s.operation}{marker}")
+            result[func_name] = lines
+        return result
+    except Exception:
+        return {}
+
+
+def _build_duplication_context(finding: dict, normalized_fns: dict) -> str:
+    """Build detailed context for structural_duplication findings."""
+    nodes = finding.get("nodes", [])
+    if len(nodes) < 2:
+        return ""
+
+    f1, f2 = nodes[0], nodes[1]
+    fn1_lines = normalized_fns.get(f1, [])
+    fn2_lines = normalized_fns.get(f2, [])
+
+    if not fn1_lines or not fn2_lines:
+        return ""
+
+    return (
+        f"\n  NORMALIZED DATA FLOW (this is what makes them isomorphic):\n"
+        f"\n  Function '{f1}' normalized form ({len(fn1_lines)} operations):\n"
+        + "\n".join(fn1_lines)
+        + f"\n\n  Function '{f2}' normalized form ({len(fn2_lines)} operations):\n"
+        + "\n".join(fn2_lines)
+        + f"\n\n  These two functions have the SAME graph shape — same number of\n"
+        f"  operations, same dependency pattern, same fan-out structure.\n"
+        f"  Variable names differ but the topology is identical.\n"
+        f"  The fix is to extract the shared PATTERN (not just rename):\n"
+        f"  write one helper that captures the common operation sequence,\n"
+        f"  parameterized by whatever differs between the two callers."
+    )
+
+
 def build_user_prompt(source_code: str, findings: list[dict], source_path: str) -> str:
     """Build the structured correction prompt from source and findings."""
 
@@ -92,15 +149,23 @@ def build_user_prompt(source_code: str, findings: list[dict], source_path: str) 
     errors = [f for f in findings if f["severity"] == "error"]
     warnings = [f for f in findings if f["severity"] == "warning"]
 
+    # Get normalized forms for structural duplication context
+    has_duplication = any(f["type"] == "structural_duplication" for f in errors)
+    normalized_fns = _get_normalized_functions(source_path) if has_duplication else {}
+
     findings_text = []
     for i, f in enumerate(errors, 1):
-        findings_text.append(
+        entry = (
             f"FINDING {i} [{f['type']}] (ERROR)\n"
             f"  Nodes involved: {', '.join(f['nodes'])}\n"
             f"  Lines: {f.get('source_lines', [])}\n"
             f"  Problem: {f['message']}\n"
             f"  Required fix: {f['fix_suggestion']}"
         )
+        # Add normalized graph context for duplication findings
+        if f["type"] == "structural_duplication":
+            entry += _build_duplication_context(f, normalized_fns)
+        findings_text.append(entry)
 
     if warnings:
         findings_text.append(f"\n(Additionally, {len(warnings)} warnings — address only if "
@@ -335,7 +400,7 @@ def main():
         sys.exit(0)
 
     # --- Call API ---
-    print(f"Calling Claude API ({args.model})...", file=sys.stderr)
+    print(f"Calling LLM ({args.model})...", file=sys.stderr)
     try:
         patched_code = call_llm(SYSTEM_PROMPT, user_prompt, model=args.model)
     except Exception as e:
