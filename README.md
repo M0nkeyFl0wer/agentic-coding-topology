@@ -2,6 +2,18 @@
 
 Algebraic topology for code quality. Catches structural problems in agent-generated Python — copy-paste, god functions, circular dependencies — without an LLM judge. Deterministic, Goodhart-proof, and useful today.
 
+## Origin story
+
+This started with [a Karpathy tweet](https://x.com/karpathy/status/2035173492447224237):
+
+> *"I'm not very happy with the code quality and I think agents bloat abstractions, have poor code aesthetics, are very prone to copy pasting code blocks and it's a mess, but at this point I stopped fighting it too hard and just moved on. The agents do not listen to my instructions"*
+
+He'd been [describing a coding rhythm](https://x.com/karpathy/status/1915581920022585597) where every line should do exactly one thing, intermediate variables should serve as documentation, and agents should follow style rules in AGENTS.md. But they don't. Despite explicit instructions like "every line of code should do exactly one thing," agents still write complex one-liners that call two functions and index the result.
+
+The question was: if agents won't follow style instructions, can you *measure* the violations instead of asking nicely? Not "please write clean code" but "your data flow graph has isomorphic subgraphs — that's copy-paste, mathematically."
+
+So we built a tool that normalizes Python into single-operation statements (the form Karpathy wants), builds the data flow graph, and runs algebraic topology to find structural problems. Then we [calibrated it against Karpathy's own code](https://github.com/karpathy/nanoGPT) — his gold standard repos score near zero errors, agent-assisted code scores 10-25x higher. The gradient is real.
+
 ## The problem
 
 Coding agents (Claude Code, Cursor, Copilot) generate code that passes vibes checks but fails under structural scrutiny. They copy-paste functions with different variable names. They build 900-line god functions. They create circular dependencies. LLM-as-judge can't catch this reliably because the judge has the same blind spots as the generator.
