@@ -1,0 +1,17 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/mcp/proxy.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/mcp/proxy.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 53,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 55,
+    "edge_count": 2,
+    "intermediate_ratio": 0.03636363636363636,
+    "function_count": 8
+  }
+}

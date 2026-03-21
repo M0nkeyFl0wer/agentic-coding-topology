@@ -1,0 +1,129 @@
+{
+  "source_path": "~/tmp/nanochat/scripts/tok_eval.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/nanochat/scripts/tok_eval.py: 2 errors, 5 warnings, 7 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'tokenizer_results' feeds 6 downstream operations simultaneously (max: 2). Operation: {}",
+      "nodes": [
+        "tokenizer_results",
+        "_t31",
+        "_t32",
+        "_t34",
+        "_t35",
+        "baseline_results",
+        "ours_results"
+      ],
+      "source_lines": [
+        164
+      ],
+      "metric_value": 6,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'tokenizer_results' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'baseline_data' feeds 4 downstream operations simultaneously (max: 2). Operation: baseline_results[name]",
+      "nodes": [
+        "baseline_data",
+        "_t21",
+        "_t24",
+        "_t45",
+        "_t48"
+      ],
+      "source_lines": [
+        257
+      ],
+      "metric_value": 4,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'baseline_data' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t23' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t21  _t22",
+      "nodes": [
+        "_t23"
+      ],
+      "source_lines": [
+        217
+      ],
+      "metric_value": 0.0003428347536487413,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t23' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t25' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t23  _t24",
+      "nodes": [
+        "_t25"
+      ],
+      "source_lines": [
+        217
+      ],
+      "metric_value": 0.00031834655695954555,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t25' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t47' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t45  _t46",
+      "nodes": [
+        "_t47"
+      ],
+      "source_lines": [
+        259
+      ],
+      "metric_value": 0.0003428347536487413,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t47' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t49' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t47  _t48",
+      "nodes": [
+        "_t49"
+      ],
+      "source_lines": [
+        259
+      ],
+      "metric_value": 0.00031834655695954555,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t49' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_expr_39', '_t40', '_t43'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_expr_39",
+        "_t40",
+        "_t43",
+        "_t42",
+        "_t41"
+      ],
+      "source_lines": [
+        254
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0024977960622979724,
+    "mean_betweenness": 0.00018191231826259743,
+    "component_count": 51,
+    "cycle_count": 0,
+    "node_count": 84,
+    "edge_count": 40,
+    "intermediate_ratio": 0.30952380952380953,
+    "function_count": 1
+  }
+}

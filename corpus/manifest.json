@@ -1,0 +1,47 @@
+{
+  "description": "codetopo calibration corpus for GraphMETR training",
+  "generated_by": "codetopo v0.1.0 (commit 2911847+)",
+  "tiers": {
+    "karpathy_gold": {
+      "file_count": 18,
+      "total_errors": 1,
+      "total_warnings": 6,
+      "finding_types": {
+        "isolated_component": 4,
+        "bridge_bottleneck": 2,
+        "statement_multitask": 1
+      }
+    },
+    "karpathy_complex": {
+      "file_count": 9,
+      "total_errors": 1,
+      "total_warnings": 15,
+      "finding_types": {
+        "bridge_bottleneck": 5,
+        "abstraction_bloat": 5,
+        "isolated_component": 5,
+        "statement_multitask": 1
+      }
+    },
+    "agent_assisted": {
+      "file_count": 72,
+      "total_errors": 12,
+      "total_warnings": 108,
+      "finding_types": {
+        "bridge_bottleneck": 57,
+        "isolated_component": 32,
+        "abstraction_bloat": 19,
+        "statement_multitask": 10,
+        "structural_duplication": 2
+      }
+    }
+  },
+  "fix_pass_summary": {
+    "total_runs": 8,
+    "improved": 1,
+    "unchanged": 6,
+    "regressed": 1,
+    "model": "anthropic/claude-sonnet-4 via OpenRouter",
+    "pair_count": 8
+  }
+}

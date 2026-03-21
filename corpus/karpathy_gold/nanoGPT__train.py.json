@@ -1,0 +1,37 @@
+{
+  "source_path": "~/tmp/nanoGPT/train.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/nanoGPT/train.py: 1 errors, 0 warnings, 1 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'checkpoint' feeds 5 downstream operations simultaneously (max: 2). Operation: {'model': raw_model.state_dict(), 'optimizer': optimizer.state_dict(), 'model_args': model_args, 'iter_num': iter_num, 'best_val_loss': best_val_loss, 'config': config}",
+      "nodes": [
+        "checkpoint",
+        "checkpoint_model_args",
+        "state_dict",
+        "iter_num",
+        "best_val_loss",
+        "_t38"
+      ],
+      "source_lines": [
+        277
+      ],
+      "metric_value": 5,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'checkpoint' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 7.574036203893055e-05,
+    "mean_betweenness": 2.3091573792356873e-06,
+    "component_count": 129,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 164,
+    "edge_count": 35,
+    "intermediate_ratio": 0.17073170731707318,
+    "function_count": 3
+  }
+}

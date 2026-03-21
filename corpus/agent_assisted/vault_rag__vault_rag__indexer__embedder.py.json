@@ -1,0 +1,45 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/embedder.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/embedder.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_get_client\u2192embed' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_get_client",
+        "embed"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_get_client\u2192embed' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'embed\u2192embed_one' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "embed",
+        "embed_one"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'embed\u2192embed_one' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.001075268817204301,
+    "mean_betweenness": 3.360215053763441e-05,
+    "component_count": 28,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 32,
+    "edge_count": 4,
+    "intermediate_ratio": 0.09375,
+    "function_count": 7
+  }
+}

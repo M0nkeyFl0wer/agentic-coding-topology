@@ -1,0 +1,53 @@
+{
+  "source_path": "~/tmp/nanochat/dev/gen_synthetic_data.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/nanochat/dev/gen_synthetic_data.py: 1 errors, 1 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'result' feeds 3 downstream operations simultaneously (max: 2). Operation: future.result()",
+      "nodes": [
+        "result",
+        "_t19",
+        "messages",
+        "metadata"
+      ],
+      "source_lines": [
+        443
+      ],
+      "metric_value": 3,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'result' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t11', '_t12', '_t10'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t11",
+        "_t12",
+        "_t10",
+        "_t9",
+        "categories"
+      ],
+      "source_lines": [
+        326
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0005471956224350205,
+    "mean_betweenness": 3.302042549176848e-05,
+    "component_count": 60,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 87,
+    "edge_count": 27,
+    "intermediate_ratio": 0.22988505747126436,
+    "function_count": 3
+  }
+}

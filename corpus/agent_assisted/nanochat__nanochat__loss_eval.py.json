@@ -1,0 +1,16 @@
+{
+  "source_path": "~/tmp/nanochat/nanochat/loss_eval.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/nanochat/loss_eval.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.002380952380952381,
+    "mean_betweenness": 0.00010822510822510824,
+    "component_count": 17,
+    "cycle_count": 0,
+    "node_count": 22,
+    "edge_count": 5,
+    "intermediate_ratio": 0.22727272727272727,
+    "function_count": 1
+  }
+}

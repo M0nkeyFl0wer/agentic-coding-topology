@@ -1,0 +1,84 @@
+{
+  "source_path": "~/tmp/nanoGPT/model.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanoGPT/model.py: 0 errors, 3 warnings, 3 total findings",
+  "findings": [
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 9 nodes: ['sd', '_expr_91', '_t96'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "sd",
+        "_expr_91",
+        "_t96",
+        "_t97",
+        "_t93",
+        "_t92",
+        "sd_hf",
+        "_expr_95",
+        "_t94"
+      ],
+      "source_lines": [
+        233,
+        239,
+        254,
+        259
+      ],
+      "metric_value": 9,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['att', '_t30', '_t35'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "att",
+        "_t30",
+        "_t35",
+        "_t33",
+        "_t34",
+        "_t31",
+        "_t32"
+      ],
+      "source_lines": [
+        67,
+        68,
+        70
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t106', '_t105', '_t108'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t106",
+        "_t105",
+        "_t108",
+        "_t107",
+        "flops_per_token",
+        "_t109"
+      ],
+      "source_lines": [
+        296
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0005751092707614446,
+    "mean_betweenness": 1.7170951642366238e-05,
+    "component_count": 113,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 163,
+    "edge_count": 52,
+    "intermediate_ratio": 0.2822085889570552,
+    "function_count": 9
+  }
+}

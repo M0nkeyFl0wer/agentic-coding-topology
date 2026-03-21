@@ -1,0 +1,66 @@
+{
+  "source": "~/tmp/nanochat/tasks/humaneval.py",
+  "fixed": "~/tmp/nanochat/tasks/humaneval.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "abstraction_bloat": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "bridge_bottleneck": {
+        "before": 2,
+        "after": 2,
+        "change": 0
+      },
+      "isolated_component": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "statement_multitask": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "warnings": {
+        "before": 4,
+        "after": 4,
+        "change": 0
+      }
+    },
+    "improved": false
+  },
+  "before_metrics": {
+    "max_betweenness": 0.006097560975609756,
+    "mean_betweenness": 0.0005807200929152149,
+    "component_count": 24,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 42,
+    "edge_count": 18,
+    "intermediate_ratio": 0.2619047619047619,
+    "function_count": 7
+  },
+  "after_metrics": {
+    "max_betweenness": 0.006097560975609756,
+    "mean_betweenness": 0.0005807200929152149,
+    "component_count": 24,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 42,
+    "edge_count": 18,
+    "intermediate_ratio": 0.2619047619047619,
+    "function_count": 7
+  }
+}

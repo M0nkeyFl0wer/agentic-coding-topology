@@ -1,0 +1,16 @@
+{
+  "source_path": "~/tmp/nanoGPT/data/openwebtext/prepare.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanoGPT/data/openwebtext/prepare.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.003076923076923077,
+    "mean_betweenness": 0.00028490028490028494,
+    "component_count": 19,
+    "cycle_count": 0,
+    "node_count": 27,
+    "edge_count": 8,
+    "intermediate_ratio": 0.2222222222222222,
+    "function_count": 1
+  }
+}

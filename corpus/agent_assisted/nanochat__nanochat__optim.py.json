@@ -1,0 +1,377 @@
+{
+  "source_path": "~/tmp/nanochat/nanochat/optim.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/nanochat/nanochat/optim.py: 1 errors, 19 warnings, 20 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'state' feeds 10 downstream operations simultaneously (max: 2). Operation: self.state[p]",
+      "nodes": [
+        "state",
+        "exp_avg",
+        "exp_avg_sq",
+        "_t71",
+        "momentum_buffer",
+        "second_momentum_buffer",
+        "_t149",
+        "_t163",
+        "_t164",
+        "_t193",
+        "_t195"
+      ],
+      "source_lines": [
+        463
+      ],
+      "metric_value": 10,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'state' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t52' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t48  _t51",
+      "nodes": [
+        "_t52"
+      ],
+      "source_lines": [
+        146
+      ],
+      "metric_value": 1.8222404446266685e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t52' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t96' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t94  _t95",
+      "nodes": [
+        "_t96"
+      ],
+      "source_lines": [
+        263
+      ],
+      "metric_value": 3.644480889253337e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t96' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t99' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t93  _t98",
+      "nodes": [
+        "_t99"
+      ],
+      "source_lines": [
+        263
+      ],
+      "metric_value": 2.7333606669400026e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t99' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t185' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t183  _t184",
+      "nodes": [
+        "_t185"
+      ],
+      "source_lines": [
+        481
+      ],
+      "metric_value": 3.644480889253337e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t185' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t188' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t182  _t187",
+      "nodes": [
+        "_t188"
+      ],
+      "source_lines": [
+        481
+      ],
+      "metric_value": 2.7333606669400026e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t188' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 8 nodes: ['_t32', 'X', '_t21'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t32",
+        "X",
+        "_t21",
+        "_t26",
+        "_t20",
+        "_t31",
+        "_t22",
+        "_t27"
+      ],
+      "source_lines": [
+        116,
+        121,
+        126
+      ],
+      "metric_value": 8,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 8 nodes: ['_t98', '_t99', '_expr_92'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t98",
+        "_t99",
+        "_expr_92",
+        "_t93",
+        "_t94",
+        "_t96",
+        "_t97",
+        "_t95"
+      ],
+      "source_lines": [
+        263
+      ],
+      "metric_value": 8,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 8 nodes: ['_expr_181', '_t185', '_t183'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_expr_181",
+        "_t185",
+        "_t183",
+        "_t182",
+        "_t188",
+        "_t184",
+        "_t187",
+        "_t186"
+      ],
+      "source_lines": [
+        481
+      ],
+      "metric_value": 8,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['_t30', '_t28', '_t25'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t30",
+        "_t28",
+        "_t25",
+        "_t29",
+        "B",
+        "_t24",
+        "_t23"
+      ],
+      "source_lines": [
+        120,
+        125
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['param_infos', '_expr_142', 'pinfo'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "param_infos",
+        "_expr_142",
+        "pinfo",
+        "_t126",
+        "grad",
+        "grad_slice",
+        "_t143"
+      ],
+      "source_lines": [
+        373,
+        382,
+        410,
+        412,
+        413,
+        414
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t48', '_t49', '_t50'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t48",
+        "_t49",
+        "_t50",
+        "_expr_47",
+        "_t52",
+        "_t51"
+      ],
+      "source_lines": [
+        146
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['future', '_t165', '_t123'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "future",
+        "_t165",
+        "_t123",
+        "_t127",
+        "_t139",
+        "_t202"
+      ],
+      "source_lines": [
+        376,
+        383,
+        404,
+        446,
+        496
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t210', '_t211', '_t209'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t210",
+        "_t211",
+        "_t209",
+        "_expr_208",
+        "_t212",
+        "_t213"
+      ],
+      "source_lines": [
+        505
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_expr_137', '_t138', 'stacked_grads'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_expr_137",
+        "_t138",
+        "stacked_grads",
+        "_t136",
+        "_expr_135"
+      ],
+      "source_lines": [
+        397,
+        398,
+        400
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['updated_params', '_t201', '_expr_200'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "updated_params",
+        "_t201",
+        "_expr_200",
+        "_expr_198",
+        "_t199"
+      ],
+      "source_lines": [
+        472,
+        489,
+        492
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'adamw_step_fused\u2192_step_adamw' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "adamw_step_fused",
+        "_step_adamw"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'adamw_step_fused\u2192_step_adamw' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'adamw_step_fused\u2192_compute_adamw' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "adamw_step_fused",
+        "_compute_adamw"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'adamw_step_fused\u2192_compute_adamw' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'muon_step_fused\u2192_step_muon' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "muon_step_fused",
+        "_step_muon"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'muon_step_fused\u2192_step_muon' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'muon_step_fused\u2192_compute_muon' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "muon_step_fused",
+        "_compute_muon"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'muon_step_fused\u2192_compute_muon' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0001230012300123001,
+    "mean_betweenness": 6.381191262893021e-06,
+    "component_count": 134,
+    "cycle_count": 0,
+    "bridge_count": 9,
+    "structural_duplicate_pairs": 0,
+    "node_count": 272,
+    "edge_count": 140,
+    "intermediate_ratio": 0.4375,
+    "function_count": 11
+  }
+}

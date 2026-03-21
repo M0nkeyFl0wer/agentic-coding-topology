@@ -1,0 +1,17 @@
+{
+  "source_path": "~/tmp/nanochat/nanochat/dataset.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/nanochat/dataset.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 70,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 75,
+    "edge_count": 5,
+    "intermediate_ratio": 0.06666666666666667,
+    "function_count": 3
+  }
+}

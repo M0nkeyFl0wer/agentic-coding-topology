@@ -1,0 +1,79 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/cache.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/cache.py: 0 errors, 4 warnings, 4 total findings",
+  "findings": [
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t27', 'cached', '_t28'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t27",
+        "cached",
+        "_t28",
+        "created",
+        "_t29",
+        "drift"
+      ],
+      "source_lines": [
+        134,
+        142,
+        152
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_cosine_distance\u2192_check_drift' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_cosine_distance",
+        "_check_drift"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_cosine_distance\u2192_check_drift' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_or_refresh\u2192_check_drift' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_or_refresh",
+        "_check_drift"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_or_refresh\u2192_check_drift' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_or_refresh\u2192warm_project_cache' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_or_refresh",
+        "warm_project_cache"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_or_refresh\u2192warm_project_cache' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0004884004884004884,
+    "mean_betweenness": 2.787068004459309e-05,
+    "component_count": 71,
+    "cycle_count": 0,
+    "bridge_count": 3,
+    "structural_duplicate_pairs": 0,
+    "node_count": 92,
+    "edge_count": 21,
+    "intermediate_ratio": 0.20652173913043478,
+    "function_count": 7
+  }
+}

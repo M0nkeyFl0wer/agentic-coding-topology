@@ -1,0 +1,49 @@
+{
+  "source": "~/tmp/nanochat/tasks/mmlu.py",
+  "fixed": "~/tmp/nanochat/tasks/mmlu.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "statement_multitask": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "warnings": {
+        "before": 0,
+        "after": 0,
+        "change": 0
+      }
+    },
+    "improved": false
+  },
+  "before_metrics": {
+    "max_betweenness": 0.003952569169960474,
+    "mean_betweenness": 0.0003293807641633728,
+    "component_count": 16,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 24,
+    "edge_count": 8,
+    "intermediate_ratio": 0.125,
+    "function_count": 5
+  },
+  "after_metrics": {
+    "max_betweenness": 0.003952569169960474,
+    "mean_betweenness": 0.0003293807641633728,
+    "component_count": 16,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 24,
+    "edge_count": 8,
+    "intermediate_ratio": 0.125,
+    "function_count": 5
+  }
+}

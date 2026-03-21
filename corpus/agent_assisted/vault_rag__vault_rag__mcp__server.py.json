@@ -1,0 +1,17 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/mcp/server.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/mcp/server.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 66,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 70,
+    "edge_count": 4,
+    "intermediate_ratio": 0.05714285714285714,
+    "function_count": 7
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/topology.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/topology.py: 0 errors, 4 warnings, 4 total findings",
+  "findings": [
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['_t9', '_expr_11', '_t12'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t9",
+        "_expr_11",
+        "_t12",
+        "existing",
+        "_t13",
+        "_t10",
+        "G"
+      ],
+      "source_lines": [
+        139,
+        141,
+        667,
+        762
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['node_list', '_expr_66', '_expr_64'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "node_list",
+        "_expr_66",
+        "_expr_64",
+        "_t52",
+        "_t65",
+        "_t67"
+      ],
+      "source_lines": [
+        291,
+        348,
+        350
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t73', '_t74', '_t76'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t73",
+        "_t74",
+        "_t76",
+        "_t75",
+        "neighbors"
+      ],
+      "source_lines": [
+        401
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['report', '_t150', 'persistent'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "report",
+        "_t150",
+        "persistent",
+        "new",
+        "write_counts"
+      ],
+      "source_lines": [
+        767,
+        805,
+        818,
+        819
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00013831258644536652,
+    "mean_betweenness": 3.929334842197912e-06,
+    "component_count": 179,
+    "cycle_count": 0,
+    "bridge_count": 10,
+    "structural_duplicate_pairs": 0,
+    "node_count": 242,
+    "edge_count": 64,
+    "intermediate_ratio": 0.19834710743801653,
+    "function_count": 11
+  }
+}

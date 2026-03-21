@@ -1,0 +1,15 @@
+{
+  "source_path": "~/tmp/nanoGPT/config/eval_gpt2.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanoGPT/config/eval_gpt2.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 5,
+    "node_count": 5,
+    "edge_count": 0,
+    "intermediate_ratio": 0.0,
+    "function_count": 0
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "source_path": "~/tmp/nanochat/nanochat/tokenizer.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/nanochat/tokenizer.py: 0 errors, 6 warnings, 6 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '__init__\u2192encode_special' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "__init__",
+        "encode_special"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '__init__\u2192encode_special' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'from_directory\u2192get_tokenizer' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "from_directory",
+        "get_tokenizer"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'from_directory\u2192get_tokenizer' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'id_to_token\u2192decode' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "id_to_token",
+        "decode"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'id_to_token\u2192decode' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'encode_special\u2192render_for_completion' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "encode_special",
+        "render_for_completion"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'encode_special\u2192render_for_completion' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'encode\u2192__call__' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "encode",
+        "__call__"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'encode\u2192__call__' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'decode\u2192visualize_tokenization' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "decode",
+        "visualize_tokenization"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'decode\u2192visualize_tokenization' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 6.349206349206349e-05,
+    "mean_betweenness": 4.999375078115235e-07,
+    "component_count": 121,
+    "cycle_count": 0,
+    "bridge_count": 10,
+    "structural_duplicate_pairs": 0,
+    "node_count": 127,
+    "edge_count": 8,
+    "intermediate_ratio": 0.03937007874015748,
+    "function_count": 20
+  }
+}

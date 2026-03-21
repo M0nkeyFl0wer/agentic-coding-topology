@@ -1,0 +1,58 @@
+{
+  "source_path": "~/tmp/nanochat/nanochat/common.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/nanochat/common.py: 0 errors, 3 warnings, 3 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_base_dir\u2192download_file_with_lock' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_base_dir",
+        "download_file_with_lock"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_base_dir\u2192download_file_with_lock' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'print0\u2192print_banner' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "print0",
+        "print_banner"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'print0\u2192print_banner' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'print0\u2192autodetect_device_type' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "print0",
+        "autodetect_device_type"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'print0\u2192autodetect_device_type' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00014692918013517486,
+    "mean_betweenness": 1.7491569063711293e-06,
+    "component_count": 75,
+    "cycle_count": 0,
+    "bridge_count": 3,
+    "structural_duplicate_pairs": 0,
+    "node_count": 84,
+    "edge_count": 9,
+    "intermediate_ratio": 0.10714285714285714,
+    "function_count": 17
+  }
+}

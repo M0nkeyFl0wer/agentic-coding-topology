@@ -1,0 +1,54 @@
+{
+  "source": "~/tmp/nanochat/dev/gen_synthetic_data.py",
+  "fixed": "~/tmp/nanochat/dev/gen_synthetic_data.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "isolated_component": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "statement_multitask": {
+        "before": 1,
+        "after": 0,
+        "change": -1
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 1,
+        "after": 0,
+        "change": -1
+      },
+      "warnings": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      }
+    },
+    "improved": true
+  },
+  "before_metrics": {
+    "max_betweenness": 0.0005471956224350205,
+    "mean_betweenness": 3.302042549176848e-05,
+    "component_count": 60,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 87,
+    "edge_count": 27,
+    "intermediate_ratio": 0.22988505747126436,
+    "function_count": 3
+  },
+  "after_metrics": {
+    "max_betweenness": 0.0005224660397074191,
+    "mean_betweenness": 3.08196259377972e-05,
+    "component_count": 62,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 89,
+    "edge_count": 27,
+    "intermediate_ratio": 0.2247191011235955,
+    "function_count": 3
+  }
+}

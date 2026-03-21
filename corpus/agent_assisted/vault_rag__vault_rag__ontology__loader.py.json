@@ -1,0 +1,16 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/ontology/loader.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/ontology/loader.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 8,
+    "cycle_count": 0,
+    "node_count": 10,
+    "edge_count": 2,
+    "intermediate_ratio": 0.2,
+    "function_count": 1
+  }
+}

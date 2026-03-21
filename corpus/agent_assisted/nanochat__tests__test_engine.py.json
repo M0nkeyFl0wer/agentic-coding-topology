@@ -1,0 +1,31 @@
+{
+  "source_path": "~/tmp/nanochat/tests/test_engine.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/nanochat/tests/test_engine.py: 1 errors, 0 warnings, 1 total findings",
+  "findings": [
+    {
+      "type": "structural_duplication",
+      "severity": "error",
+      "message": "Functions 'test_seed_reproducibility' and 'test_temperature_zero_determinism' have isomorphic data flow graphs \u2014 structurally identical despite different variable names. This is copy-paste detected topologically.",
+      "nodes": [
+        "test_seed_reproducibility",
+        "test_temperature_zero_determinism"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "graph_isomorphic",
+      "fix_suggestion": "Extract the shared logic from 'test_seed_reproducibility' and 'test_temperature_zero_determinism' into a single function. They perform the same structural computation regardless of what they're named."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00017088174982911826,
+    "mean_betweenness": 4.38158332895175e-06,
+    "component_count": 66,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 1,
+    "node_count": 78,
+    "edge_count": 12,
+    "intermediate_ratio": 0.15384615384615385,
+    "function_count": 15
+  }
+}

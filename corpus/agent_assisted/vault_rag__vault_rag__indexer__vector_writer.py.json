@@ -1,0 +1,17 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/vector_writer.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/vector_writer.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0002922267679719462,
+    "mean_betweenness": 4.87044613286577e-06,
+    "component_count": 56,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 60,
+    "edge_count": 4,
+    "intermediate_ratio": 0.06666666666666667,
+    "function_count": 9
+  }
+}

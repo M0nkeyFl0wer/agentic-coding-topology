@@ -1,0 +1,17 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/cli/tools.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/cli/tools.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 2.1138967572823742e-05,
+    "mean_betweenness": 2.1235492538909693e-06,
+    "component_count": 157,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 219,
+    "edge_count": 62,
+    "intermediate_ratio": 0.2831050228310502,
+    "function_count": 6
+  }
+}

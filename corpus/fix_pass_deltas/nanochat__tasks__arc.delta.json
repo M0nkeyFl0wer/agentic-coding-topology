@@ -1,0 +1,49 @@
+{
+  "source": "~/tmp/nanochat/tasks/arc.py",
+  "fixed": "~/tmp/nanochat/tasks/arc.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "statement_multitask": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "warnings": {
+        "before": 0,
+        "after": 0,
+        "change": 0
+      }
+    },
+    "improved": false
+  },
+  "before_metrics": {
+    "max_betweenness": 0.005263157894736842,
+    "mean_betweenness": 0.0007518796992481203,
+    "component_count": 11,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 21,
+    "edge_count": 10,
+    "intermediate_ratio": 0.23809523809523808,
+    "function_count": 5
+  },
+  "after_metrics": {
+    "max_betweenness": 0.005847953216374269,
+    "mean_betweenness": 0.0008771929824561403,
+    "component_count": 11,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 20,
+    "edge_count": 9,
+    "intermediate_ratio": 0.15,
+    "function_count": 5
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/filters.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/filters.py: 0 errors, 1 warnings, 1 total findings",
+  "findings": [
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t32', '_t31', '_t38'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t32",
+        "_t31",
+        "_t38",
+        "source",
+        "_t37"
+      ],
+      "source_lines": [
+        135,
+        188
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00021949078138718174,
+    "mean_betweenness": 1.9086154903233195e-05,
+    "component_count": 53,
+    "cycle_count": 0,
+    "bridge_count": 1,
+    "structural_duplicate_pairs": 0,
+    "node_count": 69,
+    "edge_count": 16,
+    "intermediate_ratio": 0.2318840579710145,
+    "function_count": 6
+  }
+}

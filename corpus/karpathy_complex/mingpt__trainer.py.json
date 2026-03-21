@@ -1,0 +1,17 @@
+{
+  "source_path": "~/tmp/minGPT/mingpt/trainer.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/minGPT/mingpt/trainer.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 44,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 46,
+    "edge_count": 2,
+    "intermediate_ratio": 0.043478260869565216,
+    "function_count": 6
+  }
+}

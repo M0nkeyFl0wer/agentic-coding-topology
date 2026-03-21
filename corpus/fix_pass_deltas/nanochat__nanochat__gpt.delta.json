@@ -1,0 +1,66 @@
+{
+  "source": "~/tmp/nanochat/nanochat/gpt.py",
+  "fixed": "~/tmp/nanochat/nanochat/gpt.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "abstraction_bloat": {
+        "before": 7,
+        "after": 7,
+        "change": 0
+      },
+      "bridge_bottleneck": {
+        "before": 6,
+        "after": 4,
+        "change": -2
+      },
+      "isolated_component": {
+        "before": 2,
+        "after": 3,
+        "change": 1
+      },
+      "statement_multitask": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "warnings": {
+        "before": 15,
+        "after": 14,
+        "change": -1
+      }
+    },
+    "improved": false
+  },
+  "before_metrics": {
+    "max_betweenness": 0.002055270979573768,
+    "mean_betweenness": 2.862007019290927e-05,
+    "component_count": 161,
+    "cycle_count": 0,
+    "bridge_count": 6,
+    "structural_duplicate_pairs": 0,
+    "node_count": 253,
+    "edge_count": 95,
+    "intermediate_ratio": 0.35177865612648224,
+    "function_count": 13
+  },
+  "after_metrics": {
+    "max_betweenness": 0.0002659291564727157,
+    "mean_betweenness": 8.901394358919354e-06,
+    "component_count": 152,
+    "cycle_count": 0,
+    "bridge_count": 4,
+    "structural_duplicate_pairs": 0,
+    "node_count": 239,
+    "edge_count": 90,
+    "intermediate_ratio": 0.3514644351464435,
+    "function_count": 12
+  }
+}

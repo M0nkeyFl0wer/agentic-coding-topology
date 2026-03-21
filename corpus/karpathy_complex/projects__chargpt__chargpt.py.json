@@ -1,0 +1,17 @@
+{
+  "source_path": "~/tmp/minGPT/projects/chargpt/chargpt.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/minGPT/projects/chargpt/chargpt.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0002560163850486431,
+    "mean_betweenness": 1.6001024065540195e-05,
+    "component_count": 50,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 64,
+    "edge_count": 14,
+    "intermediate_ratio": 0.1875,
+    "function_count": 8
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "source_path": "~/tmp/nanochat/nanochat/checkpoint_manager.fixed.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/nanochat/checkpoint_manager.fixed.py: 0 errors, 1 warnings, 1 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_load_checkpoint_components\u2192load_checkpoint' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_load_checkpoint_components",
+        "load_checkpoint"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_load_checkpoint_components\u2192load_checkpoint' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00015432098765432098,
+    "mean_betweenness": 1.8819632640770852e-06,
+    "component_count": 75,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 82,
+    "edge_count": 7,
+    "intermediate_ratio": 0.04878048780487805,
+    "function_count": 13
+  }
+}

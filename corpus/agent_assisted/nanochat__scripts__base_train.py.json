@@ -1,0 +1,72 @@
+{
+  "source_path": "~/tmp/nanochat/scripts/base_train.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/nanochat/scripts/base_train.py: 1 errors, 2 warnings, 3 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'loop_state' feeds 3 downstream operations simultaneously (max: 2). Operation: meta_data['loop_state']",
+      "nodes": [
+        "loop_state",
+        "min_val_bpb",
+        "smooth_train_loss",
+        "total_training_time"
+      ],
+      "source_lines": [
+        399
+      ],
+      "metric_value": 3,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'loop_state' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t125', '_t128', '_t127'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t125",
+        "_t128",
+        "_t127",
+        "_return_124",
+        "_t126",
+        "_t129"
+      ],
+      "source_lines": [
+        385
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t88', '_t91', 'weight_decay_scaled'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t88",
+        "_t91",
+        "weight_decay_scaled",
+        "_t89",
+        "_t90"
+      ],
+      "source_lines": [
+        301
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 4.6120142972443216e-05,
+    "mean_betweenness": 1.2075375271501181e-06,
+    "component_count": 233,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 296,
+    "edge_count": 64,
+    "intermediate_ratio": 0.19594594594594594,
+    "function_count": 7
+  }
+}

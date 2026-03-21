@@ -1,0 +1,45 @@
+{
+  "source_path": "~/tmp/minGPT/projects/adder/adder.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/minGPT/projects/adder/adder.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_config\u2192get_default_config' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_config",
+        "get_default_config"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_config\u2192get_default_config' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'eval_split\u2192batch_end_callback' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "eval_split",
+        "batch_end_callback"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'eval_split\u2192batch_end_callback' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00021039343572480537,
+    "mean_betweenness": 1.2751117316654872e-05,
+    "component_count": 77,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 99,
+    "edge_count": 22,
+    "intermediate_ratio": 0.1717171717171717,
+    "function_count": 9
+  }
+}

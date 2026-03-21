@@ -1,0 +1,45 @@
+{
+  "source_path": "~/tmp/nanochat/tasks/common.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/tasks/common.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'num_examples\u2192__len__' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "num_examples",
+        "__len__"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'num_examples\u2192__len__' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_example\u2192__getitem__' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_example",
+        "__getitem__"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_example\u2192__getitem__' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.000362844702467344,
+    "mean_betweenness": 1.3438692683975704e-05,
+    "component_count": 42,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 54,
+    "edge_count": 12,
+    "intermediate_ratio": 0.18518518518518517,
+    "function_count": 8
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "source": "~/tmp/nanochat/nanochat/checkpoint_manager.py",
+  "fixed": "~/tmp/nanochat/nanochat/checkpoint_manager.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "bridge_bottleneck": {
+        "before": 0,
+        "after": 1,
+        "change": 1
+      },
+      "structural_duplication": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 1,
+        "after": 1,
+        "change": 0
+      },
+      "warnings": {
+        "before": 0,
+        "after": 1,
+        "change": 1
+      }
+    },
+    "improved": false
+  },
+  "before_metrics": {
+    "max_betweenness": 0.00018511662347278786,
+    "mean_betweenness": 2.4682216463038382e-06,
+    "component_count": 68,
+    "cycle_count": 0,
+    "bridge_count": 1,
+    "structural_duplicate_pairs": 1,
+    "node_count": 75,
+    "edge_count": 7,
+    "intermediate_ratio": 0.05333333333333334,
+    "function_count": 11
+  },
+  "after_metrics": {
+    "max_betweenness": 0.00015432098765432098,
+    "mean_betweenness": 1.8819632640770852e-06,
+    "component_count": 75,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 1,
+    "node_count": 82,
+    "edge_count": 7,
+    "intermediate_ratio": 0.04878048780487805,
+    "function_count": 13
+  }
+}

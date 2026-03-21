@@ -1,0 +1,12 @@
+{
+  "source_path": "~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/__init__.py",
+  "passed": true,
+  "summary": "[PASS] ~/Projects/hybrid-OG-vault-rag/vault_rag/indexer/__init__.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "node_count": 0,
+    "edge_count": 0,
+    "intermediate_ratio": 0.0,
+    "function_count": 0
+  }
+}

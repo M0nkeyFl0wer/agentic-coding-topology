@@ -1,0 +1,45 @@
+{
+  "source_path": "~/tmp/nanochat/scripts/chat_eval.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanochat/scripts/chat_eval.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'run_generative_eval\u2192run_chat_eval' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "run_generative_eval",
+        "run_chat_eval"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'run_generative_eval\u2192run_chat_eval' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'run_categorical_eval\u2192run_chat_eval' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "run_categorical_eval",
+        "run_chat_eval"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'run_categorical_eval\u2192run_chat_eval' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.00011944577161968466,
+    "mean_betweenness": 2.568726271391068e-06,
+    "component_count": 81,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 93,
+    "edge_count": 12,
+    "intermediate_ratio": 0.07526881720430108,
+    "function_count": 3
+  }
+}

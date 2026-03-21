@@ -1,0 +1,148 @@
+{
+  "source_path": "~/tmp/minGPT/mingpt/bpe.py",
+  "passed": false,
+  "summary": "[FAIL] ~/tmp/minGPT/mingpt/bpe.py: 1 errors, 7 warnings, 8 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'word' feeds 3 downstream operations simultaneously (max: 2). Operation: ' '.join(word)",
+      "nodes": [
+        "word",
+        "_t40",
+        "_t42",
+        "_t46"
+      ],
+      "source_lines": [
+        155
+      ],
+      "metric_value": 3,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'word' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t5' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: range(_t2, _t4)",
+      "nodes": [
+        "_t5"
+      ],
+      "source_lines": [
+        36
+      ],
+      "metric_value": 0.0002754820936639118,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t5' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t10' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: range(_t7, _t9)",
+      "nodes": [
+        "_t10"
+      ],
+      "source_lines": [
+        36
+      ],
+      "metric_value": 0.0002754820936639118,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t10' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t12' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t6  _t11",
+      "nodes": [
+        "_t12"
+      ],
+      "source_lines": [
+        36
+      ],
+      "metric_value": 0.00045913682277318635,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t12' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t16' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: range(_t13, _t15)",
+      "nodes": [
+        "_t16"
+      ],
+      "source_lines": [
+        36
+      ],
+      "metric_value": 0.00020661157024793385,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t16' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['_expr_39', '_t42', 'word'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_expr_39",
+        "_t42",
+        "word",
+        "_expr_45",
+        "_t40",
+        "_t46",
+        "_expr_41"
+      ],
+      "source_lines": [
+        130,
+        133,
+        141,
+        155
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['r', '_expr_82', '_t83'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "r",
+        "_expr_82",
+        "_t83",
+        "_expr_77",
+        "_t78"
+      ],
+      "source_lines": [
+        287,
+        292,
+        316
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_file\u2192get_encoder' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_file",
+        "get_encoder"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_file\u2192get_encoder' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.001377410468319559,
+    "mean_betweenness": 6.830601092896175e-05,
+    "component_count": 87,
+    "cycle_count": 0,
+    "bridge_count": 3,
+    "structural_duplicate_pairs": 0,
+    "node_count": 122,
+    "edge_count": 35,
+    "intermediate_ratio": 0.23770491803278687,
+    "function_count": 10
+  }
+}

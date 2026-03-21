@@ -1,0 +1,17 @@
+{
+  "source_path": "~/tmp/nanoGPT/data/shakespeare_char/prepare.py",
+  "passed": true,
+  "summary": "[PASS] ~/tmp/nanoGPT/data/shakespeare_char/prepare.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0010080645161290322,
+    "mean_betweenness": 9.164222873900293e-05,
+    "component_count": 23,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 33,
+    "edge_count": 10,
+    "intermediate_ratio": 0.24242424242424243,
+    "function_count": 2
+  }
+}
