@@ -1,0 +1,31 @@
+# act.toml — configuration for the act topology analyzer
+# Place this in your project root.
+
+[codetopo]
+
+# Karpathy's core rule: maximum out-degree per statement in the data flow graph.
+# 1 means every statement feeds exactly one downstream operation.
+# Increase to 2 if you want to allow moderate fan-out.
+max_statement_outdegree = 1
+
+# Maximum betweenness centrality before a variable is flagged as a bottleneck.
+# Range: 0.0–1.0. 0.3 means "this variable lies on 30% of all shortest paths."
+max_betweenness = 0.3
+
+# Minimum betweenness/degree ratio for an intermediate variable to be "useful."
+# Variables below this threshold are structurally present but architecturally irrelevant.
+min_utility_ratio = 0.05
+
+# Maximum number of structurally isomorphic function pairs allowed.
+# 0 = no copy-paste tolerated. Increase if you have intentional structural parallels.
+max_duplicate_pairs = 0
+
+# Minimum function size (in normalized nodes) for duplication detection.
+# Smaller functions match too easily — too many false positives below 4.
+min_duplicate_size = 4
+
+# Whether to exit non-zero (fail CI) when errors are found.
+fail_on_error = true
+
+# Paths to exclude from analysis
+# exclude = ["tests/", "migrations/", "generated/"]
