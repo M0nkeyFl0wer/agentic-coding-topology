@@ -26,6 +26,7 @@ min_duplicate_size = 4
 
 # Whether to exit non-zero (fail CI) when errors are found.
 fail_on_error = true
+min_isolated_size = 5      # isolated components smaller than this are ignored (standalone functions)
 
 # Paths to exclude from analysis
 # exclude = ["tests/", "migrations/", "generated/"]

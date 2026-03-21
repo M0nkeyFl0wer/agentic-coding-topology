@@ -106,6 +106,9 @@ class TopologyAnalyzer:
         self.min_duplicate_size = cfg.get("min_duplicate_size", 4)
         # Fail build on errors
         self.fail_on_error = cfg.get("fail_on_error", True)
+        # Min isolated component size to flag — small islands (< 5 nodes) are
+        # almost always standalone functions, not real orphans
+        self.min_isolated_size = cfg.get("min_isolated_size", 5)
 
     def analyze(self, graphs) -> TopologyReport:
         """
@@ -224,6 +227,13 @@ class TopologyAnalyzer:
             if degree == 0:
                 continue
 
+            # Exempt purely linear chain nodes: in=1, out=1
+            # These are normalizer decompositions of A.B.C() chains.
+            # They cannot have meaningful betweenness by construction —
+            # there's only one path through them — so flagging them is noise.
+            if dfg.in_degree(node) == 1 and dfg.out_degree(node) == 1:
+                continue
+
             bc = betweenness.get(node, 0.0)
             utility = bc / max(degree, 1)
 
@@ -304,8 +314,8 @@ class TopologyAnalyzer:
         isolated = components[1:]  # everything that's not the giant component
 
         for component in isolated:
-            if len(component) < 2:
-                continue  # single-node orphans are usually constants
+            if len(component) < self.min_isolated_size:
+                continue  # small islands are almost always standalone functions
             nodes = list(component)
             lines = [dfg.nodes[n].get("source_line", 0) for n in nodes
                      if dfg.nodes[n].get("source_line")]
