@@ -1,5 +1,16 @@
 #!/bin/bash
-# Pre-commit hook: block commits with codetopo errors in changed Python files
+# Pre-commit hook: block commits on high-confidence codetopo findings only.
+#
+# Only these finding types block commits:
+#   structural_duplication — real copy-paste detected via graph isomorphism
+#   circular_dependency    — functions calling each other in a cycle
+#
+# Everything else (statement_multitask, abstraction_bloat, bridge_bottleneck,
+# isolated_component) is advisory — the correlation with real problems is
+# not strong enough to justify blocking commits.
+
+# High-confidence finding types that block commits
+BLOCKING_TYPES="structural_duplication|circular_dependency"
 
 # Find codetopo
 PROJECT_DIR=$(git rev-parse --show-toplevel)
@@ -20,17 +31,27 @@ fi
 FAILED=0
 for f in $STAGED; do
   RESULT=$($CODETOPO check "$f" --output json 2>/dev/null)
-  ERRORS=$(echo "$RESULT" | jq -r '[.findings[] | select(.severity == "error")] | length' 2>/dev/null)
-  if [ "$ERRORS" != "0" ] && [ -n "$ERRORS" ]; then
-    echo "codetopo: $ERRORS error(s) in $f"
-    echo "$RESULT" | jq -r '.findings[] | select(.severity == "error") | "  [\(.type)] \(.message)"' 2>/dev/null
+
+  # Filter to only blocking finding types
+  BLOCKING=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\")))] | length" 2>/dev/null)
+  ADVISORY=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\") | not))] | length" 2>/dev/null)
+
+  if [ "$BLOCKING" != "0" ] && [ -n "$BLOCKING" ]; then
+    echo "codetopo BLOCKED: $BLOCKING high-confidence error(s) in $f"
+    echo "$RESULT" | jq -r ".findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\"))) | \"  [\(.type)] \(.message)\"" 2>/dev/null
     FAILED=1
+  fi
+
+  if [ "$ADVISORY" != "0" ] && [ -n "$ADVISORY" ]; then
+    echo "codetopo advisory: $ADVISORY other error(s) in $f (not blocking)"
+    echo "$RESULT" | jq -r ".findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\") | not)) | \"  [\(.type)] \(.message)\"" 2>/dev/null
   fi
 done
 
 if [ "$FAILED" = "1" ]; then
   echo ""
-  echo "Commit blocked by codetopo. Fix errors above or use --no-verify to skip."
+  echo "Commit blocked: structural duplication or circular dependency detected."
+  echo "Fix the issues above, or use --no-verify to skip."
   exit 1
 fi
 

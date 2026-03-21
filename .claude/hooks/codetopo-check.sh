@@ -34,14 +34,15 @@ if [ $? -eq 0 ]; then
   exit 0  # no errors, nothing to report
 fi
 
-# Extract error count and findings
-ERRORS=$(echo "$RESULT" | jq -r '[.findings[] | select(.severity == "error")] | length' 2>/dev/null)
-if [ "$ERRORS" = "0" ] || [ -z "$ERRORS" ]; then
+# Only report high-confidence findings: structural_duplication, circular_dependency
+# Everything else is advisory noise that pollutes context.
+BLOCKING_TYPES="structural_duplication|circular_dependency"
+BLOCKING=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\")))] | length" 2>/dev/null)
+if [ "$BLOCKING" = "0" ] || [ -z "$BLOCKING" ]; then
   exit 0
 fi
 
-# Format findings for context injection
-echo "⚠ codetopo found $ERRORS error(s) in $FILE_PATH:"
-echo "$RESULT" | jq -r '.findings[] | select(.severity == "error") | "  [\(.type)] \(.message)\n    Fix: \(.fix_suggestion)"' 2>/dev/null
+echo "codetopo: $BLOCKING structural error(s) in $FILE_PATH:"
+echo "$RESULT" | jq -r ".findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\"))) | \"  [\(.type)] \(.message)\n    Fix: \(.fix_suggestion)\"" 2>/dev/null
 
 exit 0  # exit 0 = inject as context, don't block
