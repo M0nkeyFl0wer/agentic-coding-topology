@@ -126,10 +126,38 @@ def main():
     check.add_argument("--show-normalized", action="store_true",
                        help="Also print the normalized intermediate form")
 
+    viz = sub.add_parser("viz", help="Visualize code topology as interactive HTML")
+    viz.add_argument("path", type=Path, help="Python file to visualize")
+    viz.add_argument("--output", "-o", type=Path, default=None,
+                     help="Output HTML path (default: <file>.topology.html)")
+    viz.add_argument("--config", "-c", type=Path, default=None,
+                     help="Path to codetopo.toml config")
+    viz.add_argument("--open", action="store_true",
+                     help="Open in browser after generating")
+    viz.add_argument("--json", action="store_true",
+                     help="Output raw graph data as JSON instead of HTML")
+
     args = parser.parse_args()
 
     if not args.command:
         parser.print_help()
+        sys.exit(0)
+
+    if args.command == "viz":
+        from agentic_coding_topology.viz import extract_graph_data, generate_viz
+        config = load_config(getattr(args, "config", None))
+
+        if args.json:
+            data = extract_graph_data(str(args.path), config)
+            print(json.dumps(data, indent=2))
+        else:
+            out = generate_viz(str(args.path),
+                               str(args.output) if args.output else None,
+                               config)
+            print(f"Visualization written to {out}", file=sys.stderr)
+            if getattr(args, "open", False):
+                import webbrowser
+                webbrowser.open(f"file://{Path(out).resolve()}")
         sys.exit(0)
 
     # Load config
