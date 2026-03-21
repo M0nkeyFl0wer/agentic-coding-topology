@@ -43,6 +43,8 @@ class FindingType(Enum):
     ISOLATED_COMPONENT = "isolated_component"           # orphaned code
     HIGH_BETWEENNESS = "high_betweenness"               # dangerous centrality
     TOPOLOGICAL_HOLE = "topological_hole"               # H1 feature = missed abstraction
+    FUNCTION_BLOAT = "function_bloat"                   # function does too many things
+    FUNCTION_COUPLING = "function_coupling"             # function is called by too many others
 
 
 @dataclass
@@ -102,17 +104,24 @@ class TopologyAnalyzer:
         self.min_utility_ratio = cfg.get("min_utility_ratio", 0.05)
         # Max number of structurally isomorphic subgraph pairs allowed
         self.max_duplicate_pairs = cfg.get("max_duplicate_pairs", 0)
-        # Min subgraph size for duplication detection (avoid trivial matches)
-        self.min_duplicate_size = cfg.get("min_duplicate_size", 4)
+        # Min subgraph size for duplication detection
+        # Lowered from 4→3 after A/B review: 3-node API handlers are the most
+        # common agent copy-paste pattern and were slipping through
+        self.min_duplicate_size = cfg.get("min_duplicate_size", 3)
         # Fail build on errors
         self.fail_on_error = cfg.get("fail_on_error", True)
         # Min isolated component size to flag — small islands (< 5 nodes) are
         # almost always standalone functions, not real orphans
         self.min_isolated_size = cfg.get("min_isolated_size", 5)
         # Bridge bottleneck: ignore bridges where either endpoint has degree >= this.
-        # A helper called from one hub isn't fragile — it's normal decomposition.
-        # Only flag bridges connecting two independent subsystems of similar size.
         self.min_bridge_hub_degree = cfg.get("min_bridge_hub_degree", 3)
+        # Function bloat: max normalized operations per function before flagging
+        # A/B review showed 900-line god functions are the worst structural problem
+        # codetopo missed. This catches them.
+        self.max_function_operations = cfg.get("max_function_operations", 50)
+        # Function coupling: max in-degree in call graph before flagging
+        # High in-degree = many callers = high blast radius on change
+        self.max_function_callers = cfg.get("max_function_callers", 8)
 
     def analyze(self, graphs) -> TopologyReport:
         """
@@ -136,6 +145,12 @@ class TopologyAnalyzer:
         if cg.number_of_nodes() > 0:
             self._check_circular_dependencies(cg, report)
             self._check_bridge_bottlenecks(cg, report)
+
+        # --- Function-level checks (P4: bloat, P7: coupling) ---
+        if len(graphs.function_subgraphs) >= 1:
+            self._check_function_bloat(graphs.function_subgraphs, report)
+        if cg.number_of_nodes() > 0:
+            self._check_function_coupling(cg, report)
 
         # --- Cross-function structural duplication ---
         if len(graphs.function_subgraphs) >= 2:
@@ -402,6 +417,70 @@ class TopologyAnalyzer:
                 ),
             ))
 
+    def _check_function_bloat(
+        self,
+        subgraphs: dict[str, nx.DiGraph],
+        report: TopologyReport,
+    ):
+        """
+        Detect functions with too many operations (P4: single responsibility).
+
+        A function with 50+ normalized operations is doing too many things.
+        This catches the 'god function' pattern that graph topology alone
+        cannot see — it's about scope, not data flow shape.
+        """
+        for func_name, subgraph in subgraphs.items():
+            op_count = subgraph.number_of_nodes()
+            if op_count >= self.max_function_operations:
+                report.findings.append(Finding(
+                    finding_type=FindingType.FUNCTION_BLOAT,
+                    severity=Severity.WARNING,
+                    message=(
+                        f"Function '{func_name}' has {op_count} normalized "
+                        f"operations (threshold: {self.max_function_operations}). "
+                        f"This function is doing too many things."
+                    ),
+                    nodes=[func_name],
+                    source_lines=[],
+                    metric_value=op_count,
+                    metric_name="function_operation_count",
+                    fix_suggestion=(
+                        f"Break '{func_name}' into smaller functions, each with "
+                        f"a single responsibility. Extract coherent sub-sequences "
+                        f"of operations into named helpers."
+                    ),
+                ))
+
+    def _check_function_coupling(self, cg: nx.DiGraph, report: TopologyReport):
+        """
+        Detect functions with too many callers (P7: minimize blast radius).
+
+        A function called by 8+ other functions is a high-coupling point.
+        Changing it affects many callers — high blast radius.
+        """
+        for func_name in cg.nodes:
+            in_deg = cg.in_degree(func_name)
+            if in_deg >= self.max_function_callers:
+                callers = [u for u, _ in cg.in_edges(func_name)]
+                report.findings.append(Finding(
+                    finding_type=FindingType.FUNCTION_COUPLING,
+                    severity=Severity.WARNING,
+                    message=(
+                        f"Function '{func_name}' is called by {in_deg} other "
+                        f"functions (threshold: {self.max_function_callers}). "
+                        f"High coupling — changes here affect many callers."
+                    ),
+                    nodes=[func_name] + callers[:5],
+                    source_lines=[],
+                    metric_value=in_deg,
+                    metric_name="function_caller_count",
+                    fix_suggestion=(
+                        f"'{func_name}' is a coupling hotspot. Consider whether "
+                        f"callers could use a more specific interface, or whether "
+                        f"this function should be split into variants."
+                    ),
+                ))
+
     def _check_structural_duplication(
         self,
         subgraphs: dict[str, nx.DiGraph],
@@ -437,11 +516,13 @@ class TopologyAnalyzer:
                     g2.number_of_nodes() < self.min_duplicate_size):
                 continue
 
-            # Skip edgeless graphs — two disconnected node sets of the same
-            # size are trivially isomorphic but structurally meaningless.
-            # There's no topology to compare when there are no edges.
+            # Skip large edgeless graphs — two disconnected node sets of the
+            # same size are trivially isomorphic but structurally meaningless.
+            # However, small edgeless functions (≤5 nodes) ARE real copy-paste:
+            # API endpoint handlers that are 3-4 lines of try/call/return.
             if g1.number_of_edges() == 0 or g2.number_of_edges() == 0:
-                continue
+                if g1.number_of_nodes() > 5 or g2.number_of_nodes() > 5:
+                    continue
 
             # Fast filter: degree sequences must match
             if (sorted(d for _, d in g1.degree()) !=
