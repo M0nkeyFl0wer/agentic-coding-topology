@@ -109,6 +109,10 @@ class TopologyAnalyzer:
         # Min isolated component size to flag — small islands (< 5 nodes) are
         # almost always standalone functions, not real orphans
         self.min_isolated_size = cfg.get("min_isolated_size", 5)
+        # Bridge bottleneck: ignore bridges where either endpoint has degree >= this.
+        # A helper called from one hub isn't fragile — it's normal decomposition.
+        # Only flag bridges connecting two independent subsystems of similar size.
+        self.min_bridge_hub_degree = cfg.get("min_bridge_hub_degree", 3)
 
     def analyze(self, graphs) -> TopologyReport:
         """
@@ -374,6 +378,12 @@ class TopologyAnalyzer:
         report.metrics["bridge_count"] = len(bridges)
 
         for u, v in bridges:
+            # Skip hub-and-spoke patterns: if either endpoint has high degree,
+            # this is normal module decomposition, not structural fragility.
+            # Real bridges connect two independent subsystems of similar size.
+            if (undirected.degree(u) >= self.min_bridge_hub_degree or
+                    undirected.degree(v) >= self.min_bridge_hub_degree):
+                continue
             report.findings.append(Finding(
                 finding_type=FindingType.BRIDGE_BOTTLENECK,
                 severity=Severity.WARNING,
