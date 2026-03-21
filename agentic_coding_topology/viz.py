@@ -165,6 +165,23 @@ body {{ font-family: 'SF Mono', 'Fira Code', monospace; background: #0d1117; col
 .metric .val {{ color: #58a6ff; }}
 .func-item {{ display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #21262d; cursor: pointer; }}
 .func-item:hover {{ color: #58a6ff; }}
+/* About modal */
+#about-btn {{ cursor: pointer; color: #8b949e; font-size: 12px; border: 1px solid #30363d; padding: 3px 10px; border-radius: 12px; }}
+#about-btn:hover {{ color: #c9d1d9; background: #21262d; }}
+#about-overlay {{ display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; justify-content: center; align-items: center; }}
+#about-overlay.open {{ display: flex; }}
+#about-modal {{ background: #161b22; border: 1px solid #30363d; border-radius: 8px; max-width: 560px; width: 90vw; max-height: 80vh; overflow-y: auto; padding: 24px; font-size: 13px; line-height: 1.6; }}
+#about-modal h2 {{ color: #58a6ff; font-size: 16px; margin-bottom: 12px; }}
+#about-modal h3 {{ color: #d2a8ff; font-size: 13px; margin-top: 16px; margin-bottom: 4px; }}
+#about-modal p {{ color: #8b949e; margin-bottom: 8px; }}
+#about-modal a {{ color: #58a6ff; text-decoration: none; }}
+#about-modal a:hover {{ text-decoration: underline; }}
+#about-modal .close-about {{ float: right; cursor: pointer; color: #8b949e; font-size: 20px; line-height: 1; }}
+#about-modal .close-about:hover {{ color: #c9d1d9; }}
+#about-modal code {{ background: #0d1117; padding: 2px 6px; border-radius: 3px; font-size: 12px; }}
+#about-modal .legend {{ display: flex; gap: 16px; flex-wrap: wrap; margin: 8px 0; }}
+#about-modal .legend-item {{ display: flex; align-items: center; gap: 6px; font-size: 12px; }}
+#about-modal .dot {{ width: 10px; height: 10px; border-radius: 50%; display: inline-block; }}
 #tooltip {{ position: absolute; background: #1c2128; border: 1px solid #30363d; padding: 8px 12px; border-radius: 6px; font-size: 11px; pointer-events: none; display: none; max-width: 300px; z-index: 10; }}
 #tooltip .btn {{ pointer-events: auto; margin-top: 6px; display: inline-block; font-size: 10px; color: #58a6ff; cursor: pointer; border: 1px solid #30363d; padding: 2px 8px; border-radius: 3px; background: #161b22; }}
 #tooltip .btn:hover {{ background: #21262d; }}
@@ -204,7 +221,51 @@ svg text {{ font-family: 'SF Mono', 'Fira Code', monospace; }}
 <body>
 <div id="header">
   <h1>codetopo &mdash; <span id="filepath"></span></h1>
-  <span class="status" id="status"></span>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span id="about-btn" onclick="document.getElementById('about-overlay').classList.add('open')">About</span>
+    <span class="status" id="status"></span>
+  </div>
+</div>
+
+<!-- About modal -->
+<div id="about-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div id="about-modal">
+    <span class="close-about" onclick="document.getElementById('about-overlay').classList.remove('open')">&times;</span>
+    <h2>codetopo</h2>
+    <p>Algebraic topology for code quality. Catches structural problems in Python code &mdash; copy-paste, abstraction bloat, circular dependencies &mdash; without an LLM judge. Deterministic and Goodhart-proof by design.</p>
+
+    <h3>What you're looking at</h3>
+    <p>This is an interactive visualization of the <b>data flow graph</b> extracted from a Python source file. Each node is a variable or intermediate value. Each edge means "this value was computed from that one." codetopo normalizes the code into single-operation statements, builds the graph, then runs topology analysis to find structural problems.</p>
+
+    <div class="legend">
+      <div class="legend-item"><span class="dot" style="background:#da3633"></span> Error node</div>
+      <div class="legend-item"><span class="dot" style="background:#d29922"></span> Warning node</div>
+      <div class="legend-item"><span class="dot" style="background:#238636"></span> Clean node</div>
+      <div class="legend-item"><span class="dot" style="background:#484f58;width:6px;height:6px"></span> Intermediate (normalizer-introduced)</div>
+    </div>
+    <p>Node border colors indicate which function the variable belongs to. Drag nodes to rearrange. Scroll to zoom.</p>
+
+    <h3>How to use</h3>
+    <p><b>Click a node</b> to open the source code panel, scrolled to that line.<br>
+    <b>Click "View Code &amp; Topology"</b> on a finding to see the source with error lines highlighted and the normalized data flow.<br>
+    <b>Click a function name</b> in the sidebar to view its source and normalized form.<br>
+    <b>Switch to "Normalized" tab</b> in the code panel to see how codetopo decomposes the code before analysis.<br>
+    <b>Press Esc</b> to close the code panel.</p>
+
+    <h3>Finding types</h3>
+    <p><code>structural_duplication</code> &mdash; Two functions have isomorphic data flow graphs (same shape, different names). Copy-paste detected topologically.<br>
+    <code>statement_multitask</code> &mdash; A variable feeds too many downstream operations simultaneously.<br>
+    <code>abstraction_bloat</code> &mdash; An intermediate variable exists but has no structural utility.<br>
+    <code>bridge_bottleneck</code> &mdash; A single call edge connecting two subsystems. Fragility point.<br>
+    <code>circular_dependency</code> &mdash; Functions calling each other in a cycle.<br>
+    <code>isolated_component</code> &mdash; Code disconnected from the main data flow.</p>
+
+    <h3>Generate your own</h3>
+    <p><code>pip install agentic-coding-topology</code><br>
+    <code>codetopo viz yourfile.py --open</code></p>
+
+    <p style="margin-top:16px"><a href="https://github.com/M0nkeyFl0wer/agentic-coding-topology" target="_blank">github.com/M0nkeyFl0wer/agentic-coding-topology</a></p>
+  </div>
 </div>
 <div id="controls">
   <label><input type="checkbox" id="showDFG" checked> Data Flow</label>
