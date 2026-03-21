@@ -1,0 +1,80 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/scripts/base_eval.py",
+  "passed": false,
+  "summary": "[FAIL] /home/m0nk/tmp/nanochat/scripts/base_eval.py: 1 errors, 3 warnings, 4 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'core_results' feeds 3 downstream operations simultaneously (max: 2). Operation: evaluate_core(model, tokenizer, device)",
+      "nodes": [
+        "core_results",
+        "_t95",
+        "_t96",
+        "_t103"
+      ],
+      "source_lines": [
+        283
+      ],
+      "metric_value": 3,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'core_results' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t32', '_t31', '_t30'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t32",
+        "_t31",
+        "_t30",
+        "centered_result",
+        "_t29"
+      ],
+      "source_lines": [
+        162
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_hf_token_bytes\u2192main' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_hf_token_bytes",
+        "main"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_hf_token_bytes\u2192main' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'evaluate_core\u2192main' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "evaluate_core",
+        "main"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'evaluate_core\u2192main' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 3.439972480220158e-05,
+    "mean_betweenness": 2.1999824001407987e-06,
+    "component_count": 135,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 172,
+    "edge_count": 38,
+    "intermediate_ratio": 0.18023255813953487,
+    "function_count": 8
+  }
+}

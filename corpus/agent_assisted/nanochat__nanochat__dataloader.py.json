@@ -1,0 +1,87 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/nanochat/dataloader.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/nanochat/dataloader.py: 0 errors, 4 warnings, 4 total findings",
+  "findings": [
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['_t16', 'inputs', 'targets'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t16",
+        "inputs",
+        "targets",
+        "_t17",
+        "_t12",
+        "gpu_buffer",
+        "_t13"
+      ],
+      "source_lines": [
+        116,
+        119,
+        120
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['row_buffer', '_t26', '_t24'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "row_buffer",
+        "_t26",
+        "_t24",
+        "_expr_23",
+        "_expr_25"
+      ],
+      "source_lines": [
+        114,
+        154,
+        155
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_document_batches\u2192tokenizing_distributed_data_loader_with_state_bos_bestfit' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_document_batches",
+        "tokenizing_distributed_data_loader_with_state_bos_bestfit"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_document_batches\u2192tokenizing_distributed_data_loader_with_state_bos_bestfit' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'tokenizing_distributed_data_loader_with_state_bos_bestfit\u2192refill_buffer' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "tokenizing_distributed_data_loader_with_state_bos_bestfit",
+        "refill_buffer"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'tokenizing_distributed_data_loader_with_state_bos_bestfit\u2192refill_buffer' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0019230769230769232,
+    "mean_betweenness": 0.00014932983682983684,
+    "component_count": 45,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 66,
+    "edge_count": 21,
+    "intermediate_ratio": 0.21212121212121213,
+    "function_count": 4
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/nanochat/flash_attention.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/nanochat/flash_attention.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_sdpa_attention\u2192flash_attn_func' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_sdpa_attention",
+        "flash_attn_func"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_sdpa_attention\u2192flash_attn_func' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_sdpa_attention\u2192flash_attn_with_kvcache' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_sdpa_attention",
+        "flash_attn_with_kvcache"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_sdpa_attention\u2192flash_attn_with_kvcache' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0002922267679719462,
+    "mean_betweenness": 9.74089226573154e-06,
+    "component_count": 53,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 60,
+    "edge_count": 7,
+    "intermediate_ratio": 0.11666666666666667,
+    "function_count": 5
+  }
+}

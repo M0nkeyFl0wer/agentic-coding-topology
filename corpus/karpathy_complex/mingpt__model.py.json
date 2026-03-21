@@ -1,0 +1,101 @@
+{
+  "source_path": "/home/m0nk/tmp/minGPT/mingpt/model.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/minGPT/mingpt/model.py: 0 errors, 4 warnings, 4 total findings",
+  "findings": [
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t9' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t5  _t8",
+      "nodes": [
+        "_t9"
+      ],
+      "source_lines": [
+        27
+      ],
+      "metric_value": 0.0002207505518763797,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t9' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 9 nodes: ['_expr_87', '_t92', '_expr_91'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_expr_87",
+        "_t92",
+        "_expr_91",
+        "_t88",
+        "_t89",
+        "sd",
+        "_t93",
+        "sd_hf",
+        "_t90"
+      ],
+      "source_lines": [
+        189,
+        193,
+        206,
+        211
+      ],
+      "metric_value": 9,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 7 nodes: ['_t38', '_t35', '_t36'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t38",
+        "_t35",
+        "_t36",
+        "_t34",
+        "_t37",
+        "att",
+        "_t33"
+      ],
+      "source_lines": [
+        62,
+        63,
+        65
+      ],
+      "metric_value": 7,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t52', 'x', '_t54'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t52",
+        "x",
+        "_t54",
+        "_t102",
+        "_t51",
+        "_t53"
+      ],
+      "source_lines": [
+        91,
+        92,
+        269,
+        272
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0006622516556291391,
+    "mean_betweenness": 2.1494132682700128e-05,
+    "component_count": 102,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 152,
+    "edge_count": 52,
+    "intermediate_ratio": 0.3092105263157895,
+    "function_count": 7
+  }
+}

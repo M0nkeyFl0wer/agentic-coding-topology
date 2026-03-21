@@ -1,0 +1,32 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/scripts/chat_web.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/scripts/chat_web.py: 0 errors, 1 warnings, 1 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'initialize\u2192lifespan' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "initialize",
+        "lifespan"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'initialize\u2192lifespan' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0002848597065945022,
+    "mean_betweenness": 5.934577220718795e-06,
+    "component_count": 109,
+    "cycle_count": 0,
+    "bridge_count": 3,
+    "structural_duplicate_pairs": 0,
+    "node_count": 120,
+    "edge_count": 11,
+    "intermediate_ratio": 0.075,
+    "function_count": 13
+  }
+}

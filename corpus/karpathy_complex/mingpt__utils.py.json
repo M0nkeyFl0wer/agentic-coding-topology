@@ -1,0 +1,45 @@
+{
+  "source_path": "/home/m0nk/tmp/minGPT/mingpt/utils.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/minGPT/mingpt/utils.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'setup_logging\u2192to_dict' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "setup_logging",
+        "to_dict"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'setup_logging\u2192to_dict' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '__str__\u2192_str_helper' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "__str__",
+        "_str_helper"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '__str__\u2192_str_helper' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0006747638326585695,
+    "mean_betweenness": 3.3738191632928474e-05,
+    "component_count": 31,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 40,
+    "edge_count": 9,
+    "intermediate_ratio": 0.2,
+    "function_count": 8
+  }
+}

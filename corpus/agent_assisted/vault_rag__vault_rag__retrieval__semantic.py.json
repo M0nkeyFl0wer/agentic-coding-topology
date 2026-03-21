@@ -1,0 +1,16 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/semantic.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/semantic.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.006535947712418301,
+    "mean_betweenness": 0.0006879944960440316,
+    "component_count": 12,
+    "cycle_count": 0,
+    "node_count": 19,
+    "edge_count": 7,
+    "intermediate_ratio": 0.3157894736842105,
+    "function_count": 1
+  }
+}

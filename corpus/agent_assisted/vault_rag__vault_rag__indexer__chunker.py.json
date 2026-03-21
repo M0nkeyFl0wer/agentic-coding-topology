@@ -1,0 +1,18 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/chunker.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/chunker.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.00013061650992685477,
+    "mean_betweenness": 2.935202470266399e-06,
+    "component_count": 64,
+    "cycle_count": 0,
+    "bridge_count": 3,
+    "structural_duplicate_pairs": 0,
+    "node_count": 89,
+    "edge_count": 25,
+    "intermediate_ratio": 0.2808988764044944,
+    "function_count": 5
+  }
+}

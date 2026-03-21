@@ -1,0 +1,73 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/nanochat/report.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/nanochat/report.py: 0 errors, 3 warnings, 3 total findings",
+  "findings": [
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 6 nodes: ['_t42', '_t44', 'gpu_info'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t42",
+        "_t44",
+        "gpu_info",
+        "_t43",
+        "gpu_names",
+        "total_vram"
+      ],
+      "source_lines": [
+        125,
+        147,
+        148
+      ],
+      "metric_value": 6,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t47', 'num_lines', '_t48'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t47",
+        "num_lines",
+        "_t48",
+        "parts",
+        "num_chars"
+      ],
+      "source_lines": [
+        178,
+        180,
+        181
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'extract_timestamp\u2192generate' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "extract_timestamp",
+        "generate"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'extract_timestamp\u2192generate' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 6.347997206881229e-05,
+    "mean_betweenness": 2.1278202928093507e-06,
+    "component_count": 144,
+    "cycle_count": 0,
+    "bridge_count": 4,
+    "structural_duplicate_pairs": 0,
+    "node_count": 179,
+    "edge_count": 35,
+    "intermediate_ratio": 0.16201117318435754,
+    "function_count": 14
+  }
+}

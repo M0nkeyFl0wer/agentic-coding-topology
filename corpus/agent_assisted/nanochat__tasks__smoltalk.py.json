@@ -1,0 +1,17 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/tasks/smoltalk.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/tasks/smoltalk.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.01282051282051282,
+    "mean_betweenness": 0.0009157509157509158,
+    "component_count": 10,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 14,
+    "edge_count": 4,
+    "intermediate_ratio": 0.07142857142857142,
+    "function_count": 3
+  }
+}

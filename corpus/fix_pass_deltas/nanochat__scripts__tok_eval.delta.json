@@ -1,0 +1,57 @@
+{
+  "source": "/home/m0nk/tmp/nanochat/scripts/tok_eval.py",
+  "fixed": "/home/m0nk/tmp/nanochat/scripts/tok_eval.fixed.py",
+  "model": "anthropic/claude-sonnet-4",
+  "delta": {
+    "by_type": {
+      "abstraction_bloat": {
+        "before": 4,
+        "after": 0,
+        "change": -4
+      },
+      "isolated_component": {
+        "before": 1,
+        "after": 2,
+        "change": 1
+      },
+      "statement_multitask": {
+        "before": 2,
+        "after": 3,
+        "change": 1
+      }
+    },
+    "totals": {
+      "errors": {
+        "before": 2,
+        "after": 3,
+        "change": 1
+      },
+      "warnings": {
+        "before": 5,
+        "after": 2,
+        "change": -3
+      }
+    },
+    "improved": false
+  },
+  "before_metrics": {
+    "max_betweenness": 0.0024977960622979724,
+    "mean_betweenness": 0.00018191231826259743,
+    "component_count": 51,
+    "cycle_count": 0,
+    "node_count": 84,
+    "edge_count": 40,
+    "intermediate_ratio": 0.30952380952380953,
+    "function_count": 1
+  },
+  "after_metrics": {
+    "max_betweenness": 0.0014981273408239699,
+    "mean_betweenness": 6.31079282764676e-05,
+    "component_count": 55,
+    "cycle_count": 0,
+    "node_count": 91,
+    "edge_count": 38,
+    "intermediate_ratio": 0.21978021978021978,
+    "function_count": 1
+  }
+}

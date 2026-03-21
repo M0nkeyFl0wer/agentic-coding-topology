@@ -1,0 +1,17 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/hybrid.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/hybrid.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0021337126600284497,
+    "mean_betweenness": 5.4710581026370506e-05,
+    "component_count": 35,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 39,
+    "edge_count": 5,
+    "intermediate_ratio": 0.07692307692307693,
+    "function_count": 4
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/daemon.py",
+  "passed": false,
+  "summary": "[FAIL] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/daemon.py: 1 errors, 3 warnings, 4 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_count_wikilinks\u2192_handle_index' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_count_wikilinks",
+        "_handle_index"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_count_wikilinks\u2192_handle_index' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_process\u2192_handle_delete' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_process",
+        "_handle_delete"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_process\u2192_handle_delete' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_process\u2192_handle_index' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_process",
+        "_handle_index"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_process\u2192_handle_index' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "structural_duplication",
+      "severity": "error",
+      "message": "Functions '__init__' and '_process' have isomorphic data flow graphs \u2014 structurally identical despite different variable names. This is copy-paste detected topologically.",
+      "nodes": [
+        "__init__",
+        "_process"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "graph_isomorphic",
+      "fix_suggestion": "Extract the shared logic from '__init__' and '_process' into a single function. They perform the same structural computation regardless of what they're named."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0001424298532972511,
+    "mean_betweenness": 4.747661776575037e-06,
+    "component_count": 106,
+    "cycle_count": 0,
+    "bridge_count": 6,
+    "structural_duplicate_pairs": 1,
+    "node_count": 120,
+    "edge_count": 14,
+    "intermediate_ratio": 0.10833333333333334,
+    "function_count": 11
+  }
+}

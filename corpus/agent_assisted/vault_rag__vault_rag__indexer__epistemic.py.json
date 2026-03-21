@@ -1,0 +1,17 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/epistemic.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/epistemic.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0010080645161290322,
+    "mean_betweenness": 9.164222873900293e-05,
+    "component_count": 26,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 33,
+    "edge_count": 7,
+    "intermediate_ratio": 0.21212121212121213,
+    "function_count": 2
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "source_path": "/home/m0nk/tmp/minGPT/tests/test_huggingface_import.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/minGPT/tests/test_huggingface_import.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0008403361344537816,
+    "mean_betweenness": 7.00280112044818e-05,
+    "component_count": 25,
+    "cycle_count": 0,
+    "node_count": 36,
+    "edge_count": 11,
+    "intermediate_ratio": 0.2777777777777778,
+    "function_count": 1
+  }
+}

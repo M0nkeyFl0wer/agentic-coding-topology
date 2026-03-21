@@ -1,0 +1,16 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/scripts/tok_train.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/scripts/tok_train.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0006097560975609756,
+    "mean_betweenness": 1.4518002322880372e-05,
+    "component_count": 36,
+    "cycle_count": 0,
+    "node_count": 42,
+    "edge_count": 7,
+    "intermediate_ratio": 0.09523809523809523,
+    "function_count": 1
+  }
+}

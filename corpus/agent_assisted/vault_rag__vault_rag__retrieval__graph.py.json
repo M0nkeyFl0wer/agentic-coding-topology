@@ -1,0 +1,16 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/graph.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/graph.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0011074197120708748,
+    "mean_betweenness": 5.033725963958522e-05,
+    "component_count": 36,
+    "cycle_count": 0,
+    "node_count": 44,
+    "edge_count": 8,
+    "intermediate_ratio": 0.18181818181818182,
+    "function_count": 1
+  }
+}

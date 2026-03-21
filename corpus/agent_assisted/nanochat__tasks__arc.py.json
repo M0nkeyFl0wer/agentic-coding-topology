@@ -1,0 +1,36 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/tasks/arc.py",
+  "passed": false,
+  "summary": "[FAIL] /home/m0nk/tmp/nanochat/tasks/arc.py: 1 errors, 0 warnings, 1 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'row' feeds 4 downstream operations simultaneously (max: 2). Operation: self.ds[index]",
+      "nodes": [
+        "row",
+        "question",
+        "_t6",
+        "answer_string",
+        "_t7"
+      ],
+      "source_lines": [
+        25
+      ],
+      "metric_value": 4,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'row' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.005263157894736842,
+    "mean_betweenness": 0.0007518796992481203,
+    "component_count": 11,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 21,
+    "edge_count": 10,
+    "intermediate_ratio": 0.23809523809523808,
+    "function_count": 5
+  }
+}

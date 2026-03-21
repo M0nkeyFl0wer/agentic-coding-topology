@@ -1,0 +1,45 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/graph_writer.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/graph_writer.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'reopen\u2192close' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "reopen",
+        "close"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'reopen\u2192close' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'upsert_entities\u2192close' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "upsert_entities",
+        "close"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'upsert_entities\u2192close' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 7.121492664862555e-05,
+    "mean_betweenness": 1.1869154441437592e-06,
+    "component_count": 113,
+    "cycle_count": 0,
+    "bridge_count": 12,
+    "structural_duplicate_pairs": 0,
+    "node_count": 120,
+    "edge_count": 7,
+    "intermediate_ratio": 0.041666666666666664,
+    "function_count": 15
+  }
+}

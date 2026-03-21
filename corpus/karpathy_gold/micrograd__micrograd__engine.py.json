@@ -1,0 +1,45 @@
+{
+  "source_path": "/home/m0nk/tmp/micrograd/micrograd/engine.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/micrograd/micrograd/engine.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_backward\u2192backward' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_backward",
+        "backward"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_backward\u2192backward' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'backward\u2192build_topo' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "backward",
+        "build_topo"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'backward\u2192build_topo' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 32,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 37,
+    "edge_count": 5,
+    "intermediate_ratio": 0.13513513513513514,
+    "function_count": 16
+  }
+}

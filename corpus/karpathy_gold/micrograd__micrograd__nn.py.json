@@ -1,0 +1,17 @@
+{
+  "source_path": "/home/m0nk/tmp/micrograd/micrograd/nn.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/micrograd/micrograd/nn.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 20,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 20,
+    "edge_count": 0,
+    "intermediate_ratio": 0.0,
+    "function_count": 5
+  }
+}

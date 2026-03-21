@@ -1,0 +1,16 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/fts.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/retrieval/fts.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0,
+    "mean_betweenness": 0.0,
+    "component_count": 13,
+    "cycle_count": 0,
+    "node_count": 15,
+    "edge_count": 2,
+    "intermediate_ratio": 0.13333333333333333,
+    "function_count": 1
+  }
+}

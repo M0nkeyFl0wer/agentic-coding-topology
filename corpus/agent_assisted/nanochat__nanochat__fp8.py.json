@@ -1,0 +1,58 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/nanochat/fp8.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/nanochat/fp8.py: 0 errors, 3 warnings, 3 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '_to_col_major\u2192backward' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "_to_col_major",
+        "backward"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '_to_col_major\u2192backward' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'from_float\u2192_convert' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "from_float",
+        "_convert"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'from_float\u2192_convert' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'convert_to_float8_training\u2192_convert' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "convert_to_float8_training",
+        "_convert"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'convert_to_float8_training\u2192_convert' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.0003132832080200501,
+    "mean_betweenness": 2.1605738484141386e-05,
+    "component_count": 44,
+    "cycle_count": 0,
+    "bridge_count": 3,
+    "structural_duplicate_pairs": 0,
+    "node_count": 58,
+    "edge_count": 14,
+    "intermediate_ratio": 0.22413793103448276,
+    "function_count": 8
+  }
+}

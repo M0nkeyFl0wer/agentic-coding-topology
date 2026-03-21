@@ -1,0 +1,45 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/nanochat/engine.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/nanochat/engine.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'eval_with_timeout\u2192use_calculator' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "eval_with_timeout",
+        "use_calculator"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'eval_with_timeout\u2192use_calculator' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_pos\u2192prefill' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_pos",
+        "prefill"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_pos\u2192prefill' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 4.5964331678617394e-05,
+    "mean_betweenness": 1.2339417900299972e-06,
+    "component_count": 136,
+    "cycle_count": 0,
+    "bridge_count": 5,
+    "structural_duplicate_pairs": 0,
+    "node_count": 149,
+    "edge_count": 14,
+    "intermediate_ratio": 0.06040268456375839,
+    "function_count": 13
+  }
+}

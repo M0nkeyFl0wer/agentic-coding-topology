@@ -1,0 +1,17 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/api/session_routes.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/api/session_routes.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.001092896174863388,
+    "mean_betweenness": 4.406839414771726e-05,
+    "component_count": 50,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 62,
+    "edge_count": 12,
+    "intermediate_ratio": 0.1935483870967742,
+    "function_count": 2
+  }
+}

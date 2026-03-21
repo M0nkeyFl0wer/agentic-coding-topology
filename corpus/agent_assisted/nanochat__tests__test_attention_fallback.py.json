@@ -1,0 +1,18 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/tests/test_attention_fallback.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/tests/test_attention_fallback.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 4.47427293064877e-05,
+    "mean_betweenness": 5.926189312117576e-07,
+    "component_count": 144,
+    "cycle_count": 0,
+    "bridge_count": 8,
+    "structural_duplicate_pairs": 0,
+    "node_count": 151,
+    "edge_count": 7,
+    "intermediate_ratio": 0.046357615894039736,
+    "function_count": 19
+  }
+}

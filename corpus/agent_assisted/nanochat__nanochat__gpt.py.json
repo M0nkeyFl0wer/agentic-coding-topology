@@ -1,0 +1,259 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/nanochat/gpt.py",
+  "passed": false,
+  "summary": "[FAIL] /home/m0nk/tmp/nanochat/nanochat/gpt.py: 1 errors, 15 warnings, 16 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'x' feeds 3 downstream operations simultaneously (max: 2). Operation: norm(x)",
+      "nodes": [
+        "x",
+        "_t154",
+        "_t159",
+        "_t163"
+      ],
+      "source_lines": [
+        460
+      ],
+      "metric_value": 3,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'x' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t116' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t114  _t115",
+      "nodes": [
+        "_t116"
+      ],
+      "source_lines": [
+        327
+      ],
+      "metric_value": 6.323910706380825e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t116' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t118' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t116  _t117",
+      "nodes": [
+        "_t118"
+      ],
+      "source_lines": [
+        327
+      ],
+      "metric_value": 7.904888382976032e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t118' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t120' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t118  _t119",
+      "nodes": [
+        "_t120"
+      ],
+      "source_lines": [
+        327
+      ],
+      "metric_value": 7.377895824110963e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t120' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t122' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t120  _t121",
+      "nodes": [
+        "_t122"
+      ],
+      "source_lines": [
+        327
+      ],
+      "metric_value": 4.742933029785619e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t122' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t131' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t129  _t130",
+      "nodes": [
+        "_t131"
+      ],
+      "source_lines": [
+        357
+      ],
+      "metric_value": 3.161955353190413e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t131' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t133' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t131  _t132",
+      "nodes": [
+        "_t133"
+      ],
+      "source_lines": [
+        357
+      ],
+      "metric_value": 4.21594047092055e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t133' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t135' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t133  _t134",
+      "nodes": [
+        "_t135"
+      ],
+      "source_lines": [
+        357
+      ],
+      "metric_value": 3.161955353190413e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t135' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 12 nodes: ['_t113', '_t123', '_t117'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t113",
+        "_t123",
+        "_t117",
+        "_t118",
+        "_t116",
+        "_t120",
+        "_t121",
+        "_t115",
+        "nparams_exclude",
+        "_t122",
+        "_t119",
+        "_t114"
+      ],
+      "source_lines": [
+        327
+      ],
+      "metric_value": 12,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 9 nodes: ['_t129', 'scalars', '_t134'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t129",
+        "scalars",
+        "_t134",
+        "_t133",
+        "_t132",
+        "_t136",
+        "_t135",
+        "_t130",
+        "_t131"
+      ],
+      "source_lines": [
+        357
+      ],
+      "metric_value": 9,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'norm\u2192forward' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "norm",
+        "forward"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'norm\u2192forward' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'forward\u2192generate' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "forward",
+        "generate"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'forward\u2192generate' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '__init__\u2192_compute_window_sizes' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "__init__",
+        "_compute_window_sizes"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '__init__\u2192_compute_window_sizes' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call '__init__\u2192_precompute_rotary_embeddings' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "__init__",
+        "_precompute_rotary_embeddings"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The '__init__\u2192_precompute_rotary_embeddings' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'init_weights\u2192_precompute_rotary_embeddings' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "init_weights",
+        "_precompute_rotary_embeddings"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'init_weights\u2192_precompute_rotary_embeddings' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'get_device\u2192generate' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "get_device",
+        "generate"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'get_device\u2192generate' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.002055270979573768,
+    "mean_betweenness": 2.862007019290927e-05,
+    "component_count": 161,
+    "cycle_count": 0,
+    "bridge_count": 6,
+    "structural_duplicate_pairs": 0,
+    "node_count": 253,
+    "edge_count": 95,
+    "intermediate_ratio": 0.35177865612648224,
+    "function_count": 13
+  }
+}

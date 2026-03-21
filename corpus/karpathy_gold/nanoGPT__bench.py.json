@@ -1,0 +1,16 @@
+{
+  "source_path": "/home/m0nk/tmp/nanoGPT/bench.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanoGPT/bench.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0002403846153846154,
+    "mean_betweenness": 1.0926573426573427e-05,
+    "component_count": 58,
+    "cycle_count": 0,
+    "node_count": 66,
+    "edge_count": 8,
+    "intermediate_ratio": 0.12121212121212122,
+    "function_count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/scripts/chat_rl.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/scripts/chat_rl.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 4.5964331678617394e-05,
+    "mean_betweenness": 1.2339417900299972e-06,
+    "component_count": 125,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 149,
+    "edge_count": 24,
+    "intermediate_ratio": 0.14093959731543623,
+    "function_count": 3
+  }
+}

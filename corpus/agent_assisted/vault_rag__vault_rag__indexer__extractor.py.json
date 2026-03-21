@@ -1,0 +1,18 @@
+{
+  "source_path": "/home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/extractor.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/Projects/hybrid-OG-vault-rag/vault_rag/indexer/extractor.py: 0 errors, 0 warnings, 0 total findings",
+  "findings": [],
+  "metrics": {
+    "max_betweenness": 0.0004576659038901602,
+    "mean_betweenness": 1.5124016938898971e-05,
+    "component_count": 80,
+    "cycle_count": 0,
+    "bridge_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 116,
+    "edge_count": 36,
+    "intermediate_ratio": 0.28448275862068967,
+    "function_count": 6
+  }
+}

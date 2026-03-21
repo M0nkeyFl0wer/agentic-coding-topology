@@ -1,0 +1,50 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/scripts/chat_sft.py",
+  "passed": true,
+  "summary": "[PASS] /home/m0nk/tmp/nanochat/scripts/chat_sft.py: 0 errors, 2 warnings, 2 total findings",
+  "findings": [
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t125' has low structural utility (betweenness/degree = 0.000, threshold: 0.05). Operation: _t123  _t124",
+      "nodes": [
+        "_t125"
+      ],
+      "source_lines": [
+        468
+      ],
+      "metric_value": 1.0883287623525316e-05,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t125' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['_t125', 'smooth_train_loss', '_t124'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "_t125",
+        "smooth_train_loss",
+        "_t124",
+        "_t122",
+        "_t123"
+      ],
+      "source_lines": [
+        468
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 3.264986287057595e-05,
+    "mean_betweenness": 1.3768014463495881e-06,
+    "component_count": 201,
+    "cycle_count": 0,
+    "structural_duplicate_pairs": 0,
+    "node_count": 249,
+    "edge_count": 48,
+    "intermediate_ratio": 0.1686746987951807,
+    "function_count": 5
+  }
+}

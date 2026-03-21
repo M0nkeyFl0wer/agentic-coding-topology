@@ -1,0 +1,99 @@
+{
+  "source_path": "/home/m0nk/tmp/nanochat/tasks/humaneval.py",
+  "passed": false,
+  "summary": "[FAIL] /home/m0nk/tmp/nanochat/tasks/humaneval.py: 1 errors, 4 warnings, 5 total findings",
+  "findings": [
+    {
+      "type": "statement_multitask",
+      "severity": "error",
+      "message": "Variable 'row' feeds 4 downstream operations simultaneously (max: 2). Operation: self.ds[index]",
+      "nodes": [
+        "row",
+        "prompt",
+        "solution",
+        "entry_point",
+        "test"
+      ],
+      "source_lines": [
+        62
+      ],
+      "metric_value": 4,
+      "metric_name": "statement_out_degree",
+      "fix_suggestion": "Split the use of 'row' into separate statements, one per downstream operation. Each intermediate result should be named for what it represents."
+    },
+    {
+      "type": "abstraction_bloat",
+      "severity": "warning",
+      "message": "Intermediate variable '_t23' has low structural utility (betweenness/degree = 0.002, threshold: 0.05). Operation: _t21  _t22",
+      "nodes": [
+        "_t23"
+      ],
+      "source_lines": [
+        86
+      ],
+      "metric_value": 0.0020325203252032522,
+      "metric_name": "abstraction_utility_ratio",
+      "fix_suggestion": "Consider inlining '_t23' or verifying it's named for a meaningful concept. If it exists only as a stepping stone with no routing significance, it's bloat."
+    },
+    {
+      "type": "isolated_component",
+      "severity": "warning",
+      "message": "Isolated data flow component with 5 nodes: ['prompt', 'test', 'row'].... This computation is disconnected from the main flow.",
+      "nodes": [
+        "prompt",
+        "test",
+        "row",
+        "solution",
+        "entry_point"
+      ],
+      "source_lines": [
+        62,
+        63,
+        64,
+        65,
+        66
+      ],
+      "metric_value": 5,
+      "metric_name": "isolated_component_size",
+      "fix_suggestion": "This isolated computation is not connected to the main data flow. Either it's dead code, or a dependency is missing that should connect it."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'extract_imports\u2192evaluate' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "extract_imports",
+        "evaluate"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'extract_imports\u2192evaluate' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    },
+    {
+      "type": "bridge_bottleneck",
+      "severity": "warning",
+      "message": "Call 'extract_program\u2192evaluate' is a bridge \u2014 removing it disconnects the call graph. Structural fragility point.",
+      "nodes": [
+        "extract_program",
+        "evaluate"
+      ],
+      "source_lines": [],
+      "metric_value": 1.0,
+      "metric_name": "is_bridge",
+      "fix_suggestion": "The 'extract_program\u2192evaluate' relationship is the only connection between two subsystems. Consider whether a second connection exists or should exist."
+    }
+  ],
+  "metrics": {
+    "max_betweenness": 0.006097560975609756,
+    "mean_betweenness": 0.0005807200929152149,
+    "component_count": 24,
+    "cycle_count": 0,
+    "bridge_count": 2,
+    "structural_duplicate_pairs": 0,
+    "node_count": 42,
+    "edge_count": 18,
+    "intermediate_ratio": 0.2619047619047619,
+    "function_count": 7
+  }
+}
