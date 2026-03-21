@@ -91,16 +91,34 @@ def extract_graph_data(source_path: str, config: dict | None = None) -> dict:
             "edge_count": subgraph.number_of_edges(),
         }
 
+    # Read source code with line numbers
+    try:
+        source_lines = Path(source_path).read_text().splitlines()
+    except Exception:
+        source_lines = []
+
+    # Build normalized form per function
+    normalized = {}
+    for fname, stmts in module.functions.items():
+        normalized[fname] = [
+            {"var": s.var_name, "op": s.operation, "line": s.source_line,
+             "intermediate": s.is_intermediate}
+            for s in stmts
+        ]
+
     return {
         "source_path": source_path,
         "summary": report.summary(),
         "passed": report.passed,
         "metrics": report.metrics,
+        "source_lines": source_lines,
+        "normalized": normalized,
         "findings": [{
             "type": f.finding_type.value,
             "severity": f.severity.value,
             "message": f.message,
             "nodes": f.nodes,
+            "source_lines": f.source_lines,
             "fix": f.fix_suggestion,
         } for f in report.findings],
         "data_flow": {"nodes": dfg_nodes, "edges": dfg_edges},
@@ -130,18 +148,56 @@ body {{ font-family: 'SF Mono', 'Fira Code', monospace; background: #0d1117; col
 #controls label {{ cursor: pointer; }}
 #controls input[type=checkbox] {{ margin-right: 4px; }}
 #main {{ display: flex; height: calc(100vh - 90px); }}
-#graph {{ flex: 1; }}
-#sidebar {{ width: 320px; background: #161b22; border-left: 1px solid #30363d; overflow-y: auto; padding: 12px; font-size: 12px; }}
+#graph {{ flex: 1; position: relative; }}
+#sidebar {{ width: 340px; background: #161b22; border-left: 1px solid #30363d; overflow-y: auto; padding: 12px; font-size: 12px; }}
 #sidebar h2 {{ font-size: 13px; margin-bottom: 8px; color: #58a6ff; }}
-.finding {{ margin-bottom: 10px; padding: 8px; border-radius: 4px; border-left: 3px solid; }}
+.finding {{ margin-bottom: 10px; padding: 8px; border-radius: 4px; border-left: 3px solid; cursor: pointer; transition: background 0.15s; }}
+.finding:hover {{ filter: brightness(1.2); }}
 .finding.error {{ border-color: #da3633; background: #1c1012; }}
 .finding.warning {{ border-color: #d29922; background: #1c1a10; }}
+.finding.selected {{ outline: 2px solid #58a6ff; outline-offset: -2px; }}
 .finding .type {{ font-weight: 600; font-size: 11px; text-transform: uppercase; }}
 .finding .msg {{ margin-top: 4px; color: #8b949e; line-height: 1.4; }}
 .finding .fix {{ margin-top: 4px; color: #7ee787; font-size: 11px; }}
+.finding .view-code {{ margin-top: 6px; display: inline-block; font-size: 10px; color: #58a6ff; cursor: pointer; border: 1px solid #30363d; padding: 2px 8px; border-radius: 3px; }}
+.finding .view-code:hover {{ background: #21262d; }}
 .metric {{ display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #21262d; }}
 .metric .val {{ color: #58a6ff; }}
+.func-item {{ display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #21262d; cursor: pointer; }}
+.func-item:hover {{ color: #58a6ff; }}
 #tooltip {{ position: absolute; background: #1c2128; border: 1px solid #30363d; padding: 8px 12px; border-radius: 6px; font-size: 11px; pointer-events: none; display: none; max-width: 300px; z-index: 10; }}
+#tooltip .btn {{ pointer-events: auto; margin-top: 6px; display: inline-block; font-size: 10px; color: #58a6ff; cursor: pointer; border: 1px solid #30363d; padding: 2px 8px; border-radius: 3px; background: #161b22; }}
+#tooltip .btn:hover {{ background: #21262d; }}
+
+/* Code panel overlay */
+#code-panel {{ display: none; position: fixed; top: 0; right: 0; width: 55vw; height: 100vh; background: #0d1117; border-left: 2px solid #30363d; z-index: 100; flex-direction: column; }}
+#code-panel.open {{ display: flex; }}
+#code-panel-header {{ padding: 10px 16px; background: #161b22; border-bottom: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center; font-size: 13px; flex-shrink: 0; }}
+#code-panel-header .close {{ cursor: pointer; color: #8b949e; font-size: 18px; padding: 0 6px; }}
+#code-panel-header .close:hover {{ color: #c9d1d9; }}
+#code-panel-tabs {{ display: flex; gap: 0; background: #161b22; border-bottom: 1px solid #30363d; flex-shrink: 0; }}
+.code-tab {{ padding: 6px 16px; font-size: 11px; cursor: pointer; border-bottom: 2px solid transparent; color: #8b949e; }}
+.code-tab.active {{ color: #58a6ff; border-color: #58a6ff; }}
+.code-tab:hover {{ color: #c9d1d9; }}
+#code-panel-body {{ flex: 1; overflow-y: auto; padding: 0; }}
+#code-panel-body pre {{ margin: 0; padding: 12px 0; font-size: 12px; line-height: 1.6; }}
+.code-line {{ display: flex; padding: 0 16px; }}
+.code-line:hover {{ background: #161b22; }}
+.code-line.highlighted {{ background: #2d1b00; }}
+.code-line.error-line {{ background: #300a0a; }}
+.code-line .lineno {{ color: #484f58; min-width: 45px; text-align: right; padding-right: 16px; user-select: none; flex-shrink: 0; }}
+.code-line .code {{ white-space: pre; color: #c9d1d9; }}
+/* Finding banner inside code panel */
+.code-finding-banner {{ margin: 0 16px 0 16px; padding: 8px 12px; border-radius: 4px; font-size: 11px; line-height: 1.5; }}
+.code-finding-banner.error {{ background: #1c1012; border: 1px solid #da3633; }}
+.code-finding-banner.warning {{ background: #1c1a10; border: 1px solid #d29922; }}
+.code-finding-banner .fix-text {{ color: #7ee787; margin-top: 4px; }}
+/* Normalized view */
+.norm-line {{ display: flex; padding: 2px 16px; font-size: 11px; }}
+.norm-line.intermediate {{ opacity: 0.5; }}
+.norm-line .var {{ color: #d2a8ff; min-width: 120px; }}
+.norm-line .op {{ color: #8b949e; }}
+.norm-line .ln {{ color: #484f58; min-width: 40px; text-align: right; padding-right: 12px; }}
 svg text {{ font-family: 'SF Mono', 'Fira Code', monospace; }}
 </style>
 </head>
@@ -169,9 +225,25 @@ svg text {{ font-family: 'SF Mono', 'Fira Code', monospace; }}
 </div>
 <div id="tooltip"></div>
 
+<!-- Code panel overlay -->
+<div id="code-panel">
+  <div id="code-panel-header">
+    <span id="code-panel-title">Source Code</span>
+    <span class="close" onclick="closeCodePanel()">&times;</span>
+  </div>
+  <div id="code-panel-tabs">
+    <div class="code-tab active" data-tab="source" onclick="switchTab('source')">Source</div>
+    <div class="code-tab" data-tab="normalized" onclick="switchTab('normalized')">Normalized</div>
+  </div>
+  <div id="code-panel-body"></div>
+</div>
+
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script>
 const DATA = {data_json};
+const escHtml = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+let currentTab = 'source';
+let currentContext = null; // {{funcName, lines, finding}}
 
 // Header
 document.getElementById('filepath').textContent = DATA.source_path;
@@ -179,14 +251,115 @@ const statusEl = document.getElementById('status');
 statusEl.textContent = DATA.passed ? 'PASS' : 'FAIL';
 statusEl.className = 'status ' + (DATA.passed ? 'pass' : 'fail');
 
-// Sidebar: findings
+// --- Code Panel ---
+function openCodePanel(context) {{
+  currentContext = context;
+  document.getElementById('code-panel').classList.add('open');
+  document.getElementById('code-panel-title').textContent =
+    context.funcName ? `${{context.funcName}}` : 'Source Code';
+  renderTab(currentTab);
+}}
+
+function closeCodePanel() {{
+  document.getElementById('code-panel').classList.remove('open');
+  currentContext = null;
+}}
+
+function switchTab(tab) {{
+  currentTab = tab;
+  document.querySelectorAll('.code-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  renderTab(tab);
+}}
+
+function renderTab(tab) {{
+  const body = document.getElementById('code-panel-body');
+  if (!currentContext) return;
+
+  if (tab === 'source') {{
+    const highlightLines = new Set(currentContext.lines || []);
+    const errorLines = new Set(currentContext.errorLines || []);
+    let html = '';
+
+    // Show finding banner if present
+    if (currentContext.finding) {{
+      const f = currentContext.finding;
+      html += `<div class="code-finding-banner ${{f.severity}}">
+        <b>${{f.severity.toUpperCase()}}: ${{f.type}}</b><br>
+        ${{escHtml(f.message)}}<br>
+        <div class="fix-text">Fix: ${{escHtml(f.fix)}}</div>
+      </div>`;
+    }}
+
+    html += '<pre>';
+    DATA.source_lines.forEach((line, i) => {{
+      const num = i + 1;
+      const cls = errorLines.has(num) ? 'code-line error-line' :
+                  highlightLines.has(num) ? 'code-line highlighted' : 'code-line';
+      html += `<div class="${{cls}}"><span class="lineno">${{num}}</span><span class="code">${{escHtml(line)}}</span></div>`;
+    }});
+    html += '</pre>';
+    body.innerHTML = html;
+
+    // Scroll to first highlighted line
+    const first = Math.min(...[...highlightLines, ...errorLines].filter(n => n > 0));
+    if (first < Infinity) {{
+      const el = body.querySelectorAll('.code-line')[first - 1];
+      if (el) el.scrollIntoView({{ block: 'center' }});
+    }}
+  }} else if (tab === 'normalized') {{
+    let html = '';
+
+    if (currentContext.finding) {{
+      const f = currentContext.finding;
+      html += `<div class="code-finding-banner ${{f.severity}}">
+        <b>${{f.severity.toUpperCase()}}: ${{f.type}}</b><br>
+        ${{escHtml(f.message)}}
+      </div>`;
+    }}
+
+    const funcs = currentContext.funcName ? [currentContext.funcName] :
+      (currentContext.finding?.nodes || []).filter(n => DATA.normalized[n]);
+
+    // If finding involves multiple functions, show them side by side
+    if (funcs.length === 0) {{
+      html += '<div style="padding:16px;color:#8b949e">No normalized form available (module-level code)</div>';
+    }}
+    funcs.forEach(fn => {{
+      const stmts = DATA.normalized[fn] || [];
+      html += `<div style="padding:8px 16px;color:#58a6ff;font-size:12px;border-bottom:1px solid #21262d"><b>def ${{fn}}()</b> &mdash; ${{stmts.length}} operations</div>`;
+      stmts.forEach(s => {{
+        const cls = s.intermediate ? 'norm-line intermediate' : 'norm-line';
+        html += `<div class="${{cls}}"><span class="ln">L${{s.line}}</span><span class="var">${{escHtml(s.var)}}</span><span class="op">= ${{escHtml(s.op)}}</span></div>`;
+      }});
+    }});
+    body.innerHTML = html;
+  }}
+}}
+
+// Esc to close
+document.addEventListener('keydown', e => {{ if (e.key === 'Escape') closeCodePanel(); }});
+
+// --- Sidebar: findings (clickable) ---
 const findingsEl = document.getElementById('findings');
-DATA.findings.forEach(f => {{
+DATA.findings.forEach((f, idx) => {{
   const div = document.createElement('div');
   div.className = 'finding ' + f.severity;
   div.innerHTML = `<div class="type">${{f.severity}} — ${{f.type}}</div>
     <div class="msg">${{f.message}}</div>
-    <div class="fix">${{f.fix}}</div>`;
+    <div class="fix">${{f.fix}}</div>
+    <span class="view-code">View Code &amp; Topology</span>`;
+  div.querySelector('.view-code').addEventListener('click', (e) => {{
+    e.stopPropagation();
+    // Highlight finding nodes in graph
+    highlightNodes(f.nodes);
+    openCodePanel({{
+      funcName: null,
+      lines: f.source_lines || [],
+      errorLines: f.source_lines || [],
+      finding: f,
+    }});
+  }});
+  div.addEventListener('click', () => highlightNodes(f.nodes));
   findingsEl.appendChild(div);
 }});
 if (!DATA.findings.length) findingsEl.innerHTML = '<div style="color:#7ee787">No findings</div>';
@@ -200,16 +373,42 @@ Object.entries(DATA.metrics).forEach(([k, v]) => {{
   metricsEl.appendChild(div);
 }});
 
-// Sidebar: functions
+// Sidebar: functions (clickable)
 const funcsEl = document.getElementById('functions');
 Object.entries(DATA.functions).forEach(([name, info]) => {{
   const div = document.createElement('div');
-  div.className = 'metric';
+  div.className = 'func-item';
   div.innerHTML = `<span>${{name}}</span><span class="val">${{info.node_count}}n / ${{info.edge_count}}e</span>`;
+  div.addEventListener('click', () => {{
+    highlightNodes(info.nodes);
+    const stmts = DATA.normalized[name] || [];
+    const lines = stmts.map(s => s.line).filter(l => l > 0);
+    openCodePanel({{ funcName: name, lines: lines, errorLines: [], finding: null }});
+  }});
   funcsEl.appendChild(div);
 }});
 
-// Graph visualization
+// --- Highlight nodes in graph ---
+function highlightNodes(nodeIds) {{
+  const ids = new Set(nodeIds);
+  node.attr('opacity', d => ids.size === 0 || ids.has(d.id) ? 1 : 0.1)
+      .attr('r', d => ids.has(d.id) ? d.radius * 1.8 : d.radius);
+  label.attr('opacity', d => ids.size === 0 || ids.has(d.id) ? 1 : 0.1);
+  link.attr('opacity', d => {{
+    const sid = typeof d.source === 'string' ? d.source : d.source.id;
+    const tid = typeof d.target === 'string' ? d.target : d.target.id;
+    return ids.size === 0 || ids.has(sid) || ids.has(tid) ? 1 : 0.05;
+  }});
+  // Reset after 5 seconds
+  clearTimeout(window._hlTimeout);
+  window._hlTimeout = setTimeout(() => {{
+    node.attr('opacity', d => d.is_intermediate ? 0.6 : 1).attr('r', d => d.radius);
+    label.attr('opacity', 1);
+    link.attr('opacity', 1);
+  }}, 5000);
+}}
+
+// --- Graph visualization ---
 const container = document.getElementById('graph');
 const width = container.clientWidth;
 const height = container.clientHeight;
@@ -219,20 +418,16 @@ const svg = d3.select('#graph').append('svg')
 
 const g = svg.append('g');
 
-// Zoom
 svg.call(d3.zoom().scaleExtent([0.1, 8]).on('zoom', (e) => g.attr('transform', e.transform)));
 
-// Color scales
 const severityColor = {{ error: '#da3633', warning: '#d29922', clean: '#238636' }};
 const funcColors = d3.scaleOrdinal(d3.schemeTableau10);
 
-// Assign function groups
 const nodeToFunc = {{}};
-Object.entries(DATA.functions).forEach(([fname, info], i) => {{
+Object.entries(DATA.functions).forEach(([fname, info]) => {{
   info.nodes.forEach(n => {{ nodeToFunc[n] = fname; }});
 }});
 
-// Build D3 data
 const nodes = DATA.data_flow.nodes.map(n => ({{
   ...n, group: nodeToFunc[n.id] || '__module__',
   color: severityColor[n.severity],
@@ -244,11 +439,6 @@ const links = DATA.data_flow.edges
   .filter(e => nodeMap.has(e.source) && nodeMap.has(e.target))
   .map(e => ({{ source: e.source, target: e.target, operation: e.operation }}));
 
-// Call graph edges (separate layer)
-const cgNodes = DATA.call_graph.nodes.map(n => ({{ id: 'cg_' + n.id, label: n.id, isCG: true }}));
-const cgLinks = DATA.call_graph.edges.map(e => ({{ source: 'cg_' + e.source, target: 'cg_' + e.target, isCG: true }}));
-
-// Simulation
 const simulation = d3.forceSimulation(nodes)
   .force('link', d3.forceLink(links).id(d => d.id).distance(40).strength(0.5))
   .force('charge', d3.forceManyBody().strength(-60))
@@ -257,7 +447,6 @@ const simulation = d3.forceSimulation(nodes)
   .force('group', d3.forceX(width / 2).strength(0.02))
   .force('groupY', d3.forceY(height / 2).strength(0.02));
 
-// Arrow markers
 svg.append('defs').append('marker')
   .attr('id', 'arrow').attr('viewBox', '0 -5 10 10')
   .attr('refX', 15).attr('refY', 0)
@@ -265,13 +454,11 @@ svg.append('defs').append('marker')
   .attr('orient', 'auto')
   .append('path').attr('d', 'M0,-5L10,0L0,5').attr('fill', '#484f58');
 
-// Draw edges
 const link = g.append('g').selectAll('line')
   .data(links).join('line')
   .attr('stroke', '#484f58').attr('stroke-width', 1)
   .attr('marker-end', 'url(#arrow)');
 
-// Draw nodes
 const node = g.append('g').selectAll('circle')
   .data(nodes).join('circle')
   .attr('r', d => d.radius)
@@ -284,7 +471,6 @@ const node = g.append('g').selectAll('circle')
     .on('drag', (e, d) => {{ d.fx = e.x; d.fy = e.y; }})
     .on('end', (e, d) => {{ if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }}));
 
-// Labels
 const label = g.append('g').selectAll('text')
   .data(nodes).join('text')
   .text(d => d.id)
@@ -292,26 +478,37 @@ const label = g.append('g').selectAll('text')
   .attr('fill', d => d.findings.length > 0 ? d.color : '#8b949e')
   .attr('dx', 10).attr('dy', 3);
 
-// Tooltip
+// Tooltip + click to open code panel
 const tooltip = document.getElementById('tooltip');
 node.on('mouseover', (e, d) => {{
   let html = `<b>${{d.id}}</b><br>`;
-  if (d.operation) html += `<span style="color:#8b949e">${{d.operation}}</span><br>`;
+  if (d.operation) html += `<span style="color:#8b949e">${{escHtml(d.operation)}}</span><br>`;
   html += `Line: ${{d.source_line}} | In: ${{d.in_degree}} Out: ${{d.out_degree}}<br>`;
   if (d.findings.length) {{
     d.findings.forEach(f => {{
       const c = f.severity === 'error' ? '#da3633' : '#d29922';
-      html += `<span style="color:${{c}}">${{f.type}}: ${{f.message.slice(0,80)}}...</span><br>`;
+      html += `<span style="color:${{c}}">${{f.type}}</span><br>`;
     }});
   }}
+  html += `<span style="color:#484f58">Click to view code</span>`;
   tooltip.innerHTML = html;
   tooltip.style.display = 'block';
   tooltip.style.left = (e.pageX + 12) + 'px';
   tooltip.style.top = (e.pageY - 10) + 'px';
 }})
-.on('mouseout', () => {{ tooltip.style.display = 'none'; }});
+.on('mouseout', () => {{ tooltip.style.display = 'none'; }})
+.on('click', (e, d) => {{
+  tooltip.style.display = 'none';
+  const funcName = nodeToFunc[d.id] || null;
+  const finding = d.findings.length > 0 ? DATA.findings.find(f => f.nodes.includes(d.id)) : null;
+  openCodePanel({{
+    funcName: funcName,
+    lines: d.source_line > 0 ? [d.source_line] : [],
+    errorLines: finding ? (finding.source_lines || []) : [],
+    finding: finding,
+  }});
+}});
 
-// Tick
 simulation.on('tick', () => {{
   link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
       .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
@@ -333,6 +530,11 @@ document.getElementById('showIntermediate').addEventListener('change', (e) => {{
 
 document.getElementById('showLabels').addEventListener('change', (e) => {{
   label.attr('display', e.target.checked ? null : 'none');
+}});
+
+// Click on graph background to close code panel
+svg.on('click', (e) => {{
+  if (e.target === svg.node()) closeCodePanel();
 }});
 </script>
 </body>
