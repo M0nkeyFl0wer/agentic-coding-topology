@@ -500,14 +500,28 @@ const links = DATA.data_flow.edges
   .filter(e => nodeMap.has(e.source) && nodeMap.has(e.target))
   .map(e => ({{ source: e.source, target: e.target, operation: e.operation }}));
 
-const simulation = d3.forceSimulation(nodes)
-  .force('link', d3.forceLink(links).id(d => d.id).distance(40).strength(0.5))
-  .force('charge', d3.forceManyBody().strength(-60))
-  .force('center', d3.forceCenter(width / 2, height / 2))
-  .force('collision', d3.forceCollide().radius(d => d.radius + 2))
-  .force('group', d3.forceX(width / 2).strength(0.02))
-  .force('groupY', d3.forceY(height / 2).strength(0.02));
+// --- Compute group centers for function clustering ---
+const groupNames = [...new Set(nodes.map(n => n.group))];
+const groupCenters = {{}};
+const cols = Math.ceil(Math.sqrt(groupNames.length));
+groupNames.forEach((gn, i) => {{
+  const col = i % cols;
+  const row = Math.floor(i / cols);
+  const spacingX = width / (cols + 1);
+  const spacingY = height / (Math.ceil(groupNames.length / cols) + 1);
+  groupCenters[gn] = {{ x: spacingX * (col + 1), y: spacingY * (row + 1) }};
+}});
 
+// --- Force simulation with function group clustering ---
+const simulation = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink(links).id(d => d.id).distance(30).strength(0.7))
+  .force('charge', d3.forceManyBody().strength(-40))
+  .force('collision', d3.forceCollide().radius(d => d.radius + 3))
+  // Pull nodes toward their function's group center
+  .force('groupX', d3.forceX(d => groupCenters[d.group]?.x || width/2).strength(0.15))
+  .force('groupY', d3.forceY(d => groupCenters[d.group]?.y || height/2).strength(0.15));
+
+// Arrow markers
 svg.append('defs').append('marker')
   .attr('id', 'arrow').attr('viewBox', '0 -5 10 10')
   .attr('refX', 15).attr('refY', 0)
@@ -515,11 +529,71 @@ svg.append('defs').append('marker')
   .attr('orient', 'auto')
   .append('path').attr('d', 'M0,-5L10,0L0,5').attr('fill', '#484f58');
 
+// --- Convex hull backgrounds for function groups ---
+const hullLayer = g.append('g').attr('class', 'hulls');
+
+function updateHulls() {{
+  const groups = d3.group(nodes, d => d.group);
+  const hullData = [];
+  groups.forEach((groupNodes, groupName) => {{
+    if (groupNodes.length < 2) return; // need 2+ for a hull
+    const points = groupNodes.map(d => [d.x, d.y]);
+    // Pad the hull so it wraps around nodes
+    const padded = [];
+    points.forEach(([px, py]) => {{
+      for (let a = 0; a < Math.PI * 2; a += Math.PI / 3) {{
+        padded.push([px + Math.cos(a) * 20, py + Math.sin(a) * 20]);
+      }}
+    }});
+    const hull = d3.polygonHull(padded);
+    if (hull) hullData.push({{ group: groupName, path: hull }});
+  }});
+
+  const hulls = hullLayer.selectAll('path').data(hullData, d => d.group);
+  hulls.enter().append('path')
+    .attr('fill', d => funcColors(d.group))
+    .attr('opacity', 0.06)
+    .attr('stroke', d => funcColors(d.group))
+    .attr('stroke-width', 1)
+    .attr('stroke-opacity', 0.2)
+    .merge(hulls)
+    .attr('d', d => 'M' + d.path.join('L') + 'Z');
+  hulls.exit().remove();
+}}
+
+// --- Group labels ---
+const groupLabelLayer = g.append('g').attr('class', 'group-labels');
+
+function updateGroupLabels() {{
+  const groups = d3.group(nodes, d => d.group);
+  const labelData = [];
+  groups.forEach((groupNodes, groupName) => {{
+    if (groupName === '__module__' && groupNodes.length < 3) return;
+    const cx = d3.mean(groupNodes, d => d.x);
+    const cy = d3.min(groupNodes, d => d.y) - 14;
+    const displayName = groupName === '__module__' ? 'module' : groupName;
+    labelData.push({{ group: groupName, x: cx, y: cy, name: displayName }});
+  }});
+
+  const labels = groupLabelLayer.selectAll('text').data(labelData, d => d.group);
+  labels.enter().append('text')
+    .attr('fill', d => funcColors(d.group))
+    .attr('font-size', 10)
+    .attr('text-anchor', 'middle')
+    .attr('opacity', 0.5)
+    .merge(labels)
+    .attr('x', d => d.x).attr('y', d => d.y)
+    .text(d => d.name);
+  labels.exit().remove();
+}}
+
+// Draw edges
 const link = g.append('g').selectAll('line')
   .data(links).join('line')
   .attr('stroke', '#484f58').attr('stroke-width', 1)
   .attr('marker-end', 'url(#arrow)');
 
+// Draw nodes
 const node = g.append('g').selectAll('circle')
   .data(nodes).join('circle')
   .attr('r', d => d.radius)
@@ -532,6 +606,7 @@ const node = g.append('g').selectAll('circle')
     .on('drag', (e, d) => {{ d.fx = e.x; d.fy = e.y; }})
     .on('end', (e, d) => {{ if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }}));
 
+// Node labels
 const label = g.append('g').selectAll('text')
   .data(nodes).join('text')
   .text(d => d.id)
@@ -542,7 +617,9 @@ const label = g.append('g').selectAll('text')
 // Tooltip + click to open code panel
 const tooltip = document.getElementById('tooltip');
 node.on('mouseover', (e, d) => {{
-  let html = `<b>${{d.id}}</b><br>`;
+  let html = `<b>${{d.id}}</b>`;
+  if (d.group !== '__module__') html += ` <span style="color:${{funcColors(d.group)}}">${{d.group}}</span>`;
+  html += '<br>';
   if (d.operation) html += `<span style="color:#8b949e">${{escHtml(d.operation)}}</span><br>`;
   html += `Line: ${{d.source_line}} | In: ${{d.in_degree}} Out: ${{d.out_degree}}<br>`;
   if (d.findings.length) {{
@@ -570,11 +647,14 @@ node.on('mouseover', (e, d) => {{
   }});
 }});
 
+// Tick: update positions + hulls
 simulation.on('tick', () => {{
   link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
       .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
   node.attr('cx', d => d.x).attr('cy', d => d.y);
   label.attr('x', d => d.x).attr('y', d => d.y);
+  updateHulls();
+  updateGroupLabels();
 }});
 
 // Controls
