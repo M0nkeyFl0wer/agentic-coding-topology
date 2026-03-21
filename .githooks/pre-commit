@@ -1,0 +1,37 @@
+#!/bin/bash
+# Pre-commit hook: block commits with codetopo errors in changed Python files
+
+# Find codetopo
+PROJECT_DIR=$(git rev-parse --show-toplevel)
+if [ -x "$PROJECT_DIR/.venv/bin/codetopo" ]; then
+  CODETOPO="$PROJECT_DIR/.venv/bin/codetopo"
+elif command -v codetopo &>/dev/null; then
+  CODETOPO="codetopo"
+else
+  exit 0  # not installed, skip
+fi
+
+# Get staged Python files (excluding tests/fixtures)
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' | grep -v 'fixtures/' | grep -v '.fixed.py')
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+FAILED=0
+for f in $STAGED; do
+  RESULT=$($CODETOPO check "$f" --output json 2>/dev/null)
+  ERRORS=$(echo "$RESULT" | jq -r '[.findings[] | select(.severity == "error")] | length' 2>/dev/null)
+  if [ "$ERRORS" != "0" ] && [ -n "$ERRORS" ]; then
+    echo "codetopo: $ERRORS error(s) in $f"
+    echo "$RESULT" | jq -r '.findings[] | select(.severity == "error") | "  [\(.type)] \(.message)"' 2>/dev/null
+    FAILED=1
+  fi
+done
+
+if [ "$FAILED" = "1" ]; then
+  echo ""
+  echo "Commit blocked by codetopo. Fix errors above or use --no-verify to skip."
+  exit 1
+fi
+
+exit 0
