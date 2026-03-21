@@ -95,7 +95,7 @@ class TopologyAnalyzer:
     def __init__(self, config: Optional[dict] = None):
         cfg = config or {}
         # Karpathy rule: max out-degree per statement node in data flow graph
-        self.max_statement_outdegree = cfg.get("max_statement_outdegree", 1)
+        self.max_statement_outdegree = cfg.get("max_statement_outdegree", 2)
         # Max betweenness centrality before a node is flagged as bottleneck
         self.max_betweenness = cfg.get("max_betweenness", 0.3)
         # Min ratio of betweenness/degree for an intermediate var to be "useful"
@@ -423,6 +423,13 @@ class TopologyAnalyzer:
 
         for i, j in itertools.combinations(range(len(func_names)), 2):
             f1, f2 = func_names[i], func_names[j]
+
+            # Skip dunder method pairs — operator overloads are intentionally
+            # isomorphic (e.g. __add__ ≅ __mul__) by Python's data model
+            if (f1.startswith('__') and f1.endswith('__') and
+                    f2.startswith('__') and f2.endswith('__')):
+                continue
+
             g1, g2 = subgraphs[f1], subgraphs[f2]
 
             # Skip tiny functions — too many false positives

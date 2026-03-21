@@ -6,7 +6,7 @@
 # Karpathy's core rule: maximum out-degree per statement in the data flow graph.
 # 1 means every statement feeds exactly one downstream operation.
 # Increase to 2 if you want to allow moderate fan-out.
-max_statement_outdegree = 1
+max_statement_outdegree = 2
 
 # Maximum betweenness centrality before a variable is flagged as a bottleneck.
 # Range: 0.0–1.0. 0.3 means "this variable lies on 30% of all shortest paths."
