@@ -1,0 +1,70 @@
+{
+  "experiment": "A/B code review: standard review vs codetopo-augmented review",
+  "date": "2026-03-21",
+  "methodology": "For each repo, Pass A reads source and reviews against P1-P7 principles manually. Pass B uses pre-computed codetopo findings mapped to same principles. Compare what each caught.",
+  "repos": {
+    "Have-I-Been-Rekt": {
+      "files": ["hibr_pattern_matcher.py", "hibr_api.py", "hibr_custody.py"],
+      "pass_a": {
+        "P1": 0, "P2": 4, "P3": 0, "P4": 1, "P5": 1, "P6": 0, "P7": 0,
+        "details": "4 copy-paste endpoint handlers (analyze_email/ip/domain/crypto L210-248), dispatch function doing too much (P4), nested if/elif instead of dict lookup (P5)"
+      },
+      "pass_b": {
+        "errors": 3, "warnings": 12,
+        "P1": 3, "P2": 0, "P3": 0,
+        "details": "3 statement_multitask on result/data/response fan-out. No structural_duplication because endpoint handlers normalize to <4 nodes (below min_duplicate_size)"
+      },
+      "only_a": "4 copy-paste endpoints (too small for codetopo), dispatch pattern smell",
+      "only_b": "3 fan-out findings (debatable value — normal API patterns)",
+      "overlap": "none",
+      "winner": "pass_a"
+    },
+    "fud-buddy": {
+      "files": ["fud-buddy-backend/main.py", "server/llm.py", "server/app.py"],
+      "pass_a": {
+        "P1": 0, "P2": 2, "P3": 0, "P4": 1, "P5": 1, "P6": 0, "P7": 1,
+        "details": "_openrouter_stream ≅ _ollama_stream (P2), chat_stream is 900+ lines god function (P4/P7), nested try/except chains (P5)"
+      },
+      "pass_b": {
+        "errors": 6, "warnings": 15,
+        "P1": 0, "P2": 6, "P3": 0,
+        "details": "6 structural_duplication pairs among endpoint handlers. 8 bridge_bottleneck, 4 abstraction_bloat warnings"
+      },
+      "only_a": "900-line god function (P4/P7), stream handler duplication pattern",
+      "only_b": "4 additional duplication pairs not manually spotted",
+      "overlap": "both found structural duplication as primary issue",
+      "winner": "complementary"
+    },
+    "hybrid-OG-vault-rag": {
+      "files": ["vault_rag/topology.py", "vault_rag/api/routes.py", "vault_rag/indexer/graph_writer.py"],
+      "pass_a": {
+        "P1": 0, "P2": 0, "P3": 0, "P4": 1, "P5": 0, "P6": 1, "P7": 0,
+        "details": "routes.py endpoints do DB+formatting+error inline (P4), hidden __import__('threading') dependency (P6)"
+      },
+      "pass_b": {
+        "errors": 0, "warnings": 10,
+        "P1": 0, "P2": 0, "P3": 0,
+        "details": "6 isolated_component, 2 bridge_bottleneck, 1 abstraction_bloat — all advisory noise"
+      },
+      "only_a": "hidden import dependency (P6)",
+      "only_b": "isolated component warnings (noise)",
+      "overlap": "both agree code is clean",
+      "winner": "tie"
+    }
+  },
+  "summary": {
+    "total_findings_a": 13,
+    "total_findings_b_errors": 9,
+    "total_findings_b_warnings": 37,
+    "unique_to_a": 8,
+    "unique_to_b": 7,
+    "overlap": 2,
+    "conclusion": "Neither approach dominates. Pass A catches responsibility/scope issues (P4, P5, P6, P7) that graph topology cannot see. Pass B catches structural duplication exhaustively across all function pairs but misses small functions and has no concept of function responsibility. Combined approach is strictly better than either alone."
+  },
+  "improvements_identified": [
+    "Lower min_duplicate_size from 4 to 3 to catch small API endpoint copy-paste",
+    "Add P4 check: function complexity metric (node count per function subgraph)",
+    "Add P7 check: function coupling metric (how many other functions depend on this one)",
+    "Update /review skill to explicitly note codetopo blind spots and require manual P4/P7 review"
+  ]
+}

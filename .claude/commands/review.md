@@ -77,11 +77,36 @@ The `config` variable is used by 4 downstream operations simultaneously.
 **Principle violated:** P1 (one operation per statement)
 ```
 
+## Combined approach (IMPORTANT)
+
+codetopo measures graph properties but cannot see everything. A/B testing across 5 repos
+showed that neither automated checks nor manual review alone catches all problems.
+**You must do both passes.**
+
+### What codetopo catches that you'll miss:
+- Exhaustive pairwise duplication detection across all functions (you'd stop after spotting 2)
+- Exact cycle detection in call graphs
+- Precise fan-out counts (you'd estimate, it counts)
+
+### What you must check manually (codetopo is blind to these):
+- **P4: God functions** — codetopo now flags `function_bloat` (>50 ops) but cannot judge
+  whether a large function has single responsibility or is a grab-bag. Read the function
+  and assess whether it has one reason to change.
+- **P5: Deep nesting** — nested try/except, nested if/elif, callback pyramids.
+  codetopo sees flat normalized form, not nesting depth.
+- **P6: Import hygiene** — hidden `__import__()` calls, conditional imports that
+  obscure dependencies, circular imports between modules.
+- **Cross-file duplication** — codetopo only checks within one file. If two modules
+  have the same function, you must spot it manually.
+- **Naming** — two functions doing the same thing with different names is invisible
+  to topology if they differ in operation count by even 1.
+
 ## What this is NOT
 
 - This is not a linter. It doesn't check formatting, naming conventions, or type annotations.
-- This is not an LLM judgment. Every finding is a measured graph property with a threshold.
+- This is not an LLM judgment. Every codetopo finding is a measured graph property with a threshold.
 - This is not about making code "look clean." It's about structural properties that correlate with maintainability in calibrated benchmarks (Karpathy nanoGPT/micrograd/minGPT/nanochat gradient).
+- This is not sufficient alone. You must also do manual review for the blind spots listed above.
 
 ## Confidence levels
 
@@ -90,9 +115,11 @@ The `config` variable is used by 4 downstream operations simultaneously.
 - `circular_dependency` — cycle detection is exact
 
 **Medium confidence (advisory):**
+- `function_bloat` — >50 operations catches god functions, but threshold is configurable
+- `function_coupling` — >8 callers is a coupling hotspot
 - `statement_multitask` — real signal but threshold is debatable
-- `bridge_bottleneck` — depends on whether hub-spoke is intentional
 
 **Low confidence (informational):**
+- `bridge_bottleneck` — depends on whether hub-spoke is intentional
 - `abstraction_bloat` — often normalizer artifact
 - `isolated_component` — often standalone functions at module scope

@@ -22,12 +22,14 @@ max_duplicate_pairs = 0
 
 # Minimum function size (in normalized nodes) for duplication detection.
 # Smaller functions match too easily — too many false positives below 4.
-min_duplicate_size = 4
+min_duplicate_size = 3
 
 # Whether to exit non-zero (fail CI) when errors are found.
 fail_on_error = true
 min_isolated_size = 5      # isolated components smaller than this are ignored (standalone functions)
 min_bridge_hub_degree = 3  # bridges where either endpoint has degree >= this are hub-spoke, not fragility
+max_function_operations = 50  # functions with more normalized operations than this are flagged as bloat (P4)
+max_function_callers = 8     # functions called by more than this many others are coupling hotspots (P7)
 
 # Paths to exclude from analysis
 # exclude = ["tests/", "migrations/", "generated/"]
