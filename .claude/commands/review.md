@@ -1,20 +1,30 @@
-# /review — Structural Code Review
+# /review — Code Quality Review
 
-Review changed Python files against deterministic structural principles.
-This is not a style check. It measures algebraic properties of your code's
-data flow and call graph, then maps violations to specific design principles.
+Three-tool pipeline: ruff (style/bugs) + bandit (security) + codetopo (structure).
+Then manual review for what tools can't see. Run all passes, report combined findings.
 
 ## What to do
 
-1. Identify which Python files were recently edited (use `git diff --name-only` or the file the user specifies).
+1. Identify which Python files to review (use `git diff --name-only` or the file the user specifies).
 
-2. Run `codetopo check <file> --output json` on each file. Use the project's `.venv/bin/codetopo` if available.
+2. **Run all three tools** on each file. Report findings grouped by tool:
 
-3. For each finding, map it to the violated principle from the rubric below and explain **why** the structure is wrong — not just what codetopo found, but what design rule it breaks and what the concrete fix looks like.
+```bash
+# Style + bugs (blocks on E/F errors)
+ruff check --select E,F,W,I <file>
 
-4. If codetopo finds no errors, still review the code against the rubric manually for issues the tool can't catch (naming, API boundaries, side effects).
+# Security (blocks on medium+ severity)
+bandit -ll <file>
 
-5. Generate a visualization with `codetopo viz <file> -o /tmp/<name>_review.html` so the user can see the topology.
+# Structure (blocks on structural_duplication + circular_dependency)
+codetopo check <file> --output json
+```
+
+3. For each finding, explain **why** it's a problem — not just what the tool found, but what principle it violates and what the concrete fix looks like.
+
+4. **Manual pass** — review for what tools can't see (see blind spots section below).
+
+5. Generate a visualization with `codetopo viz <file> -o /tmp/<name>_review.html` if structural findings exist.
 
 ## Structural Rubric
 
