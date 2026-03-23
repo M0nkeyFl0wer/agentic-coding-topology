@@ -1,57 +1,89 @@
 #!/bin/bash
-# Pre-commit hook: block commits on high-confidence codetopo findings only.
+# Pre-commit quality gate: ruff (style/bugs) + bandit (security) + codetopo (structure)
 #
-# Only these finding types block commits:
-#   structural_duplication — real copy-paste detected via graph isomorphism
-#   circular_dependency    — functions calling each other in a cycle
+# Blocking:
+#   ruff errors — real bugs and import errors
+#   bandit high/medium severity — security vulnerabilities
+#   codetopo structural_duplication + circular_dependency — structural proof
 #
-# Everything else (statement_multitask, abstraction_bloat, bridge_bottleneck,
-# isolated_component) is advisory — the correlation with real problems is
-# not strong enough to justify blocking commits.
+# Advisory (printed but not blocking):
+#   ruff warnings
+#   bandit low severity
+#   codetopo other findings
 
-# High-confidence finding types that block commits
-BLOCKING_TYPES="structural_duplication|circular_dependency"
-
-# Find codetopo
-PROJECT_DIR=$(git rev-parse --show-toplevel)
-if [ -x "$PROJECT_DIR/.venv/bin/codetopo" ]; then
-  CODETOPO="$PROJECT_DIR/.venv/bin/codetopo"
-elif command -v codetopo &>/dev/null; then
-  CODETOPO="codetopo"
-else
-  exit 0  # not installed, skip
-fi
-
-# Get staged Python files (excluding tests/fixtures)
-STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' | grep -v 'fixtures/' | grep -v '.fixed.py')
+STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep '\.py$' | grep -v 'fixtures/' | grep -v '.fixed.py' | grep -v '.venv/')
 if [ -z "$STAGED" ]; then
   exit 0
 fi
 
 FAILED=0
-for f in $STAGED; do
-  RESULT=$($CODETOPO check "$f" --output json 2>/dev/null)
 
-  # Filter to only blocking finding types
-  BLOCKING=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\")))] | length" 2>/dev/null)
-  ADVISORY=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\") | not))] | length" 2>/dev/null)
+# --- ruff: style + common bugs ---
+if command -v ruff &>/dev/null; then
+  RUFF_OUT=$(ruff check --select E,F,I --no-fix $STAGED 2>/dev/null)
+  RUFF_EXIT=$?
+  if [ $RUFF_EXIT -ne 0 ] && [ -n "$RUFF_OUT" ]; then
+    RUFF_ERRORS=$(echo "$RUFF_OUT" | grep -c -E '^[^:]+:[0-9]+:[0-9]+: [EF]')
+    if [ "$RUFF_ERRORS" -gt 0 ]; then
+      echo "ruff BLOCKED: $RUFF_ERRORS error(s)"
+      echo "$RUFF_OUT" | grep -E '^[^:]+:[0-9]+:[0-9]+: [EF]' | head -10
+      FAILED=1
+    fi
+  fi
+fi
 
-  if [ "$BLOCKING" != "0" ] && [ -n "$BLOCKING" ]; then
-    echo "codetopo BLOCKED: $BLOCKING high-confidence error(s) in $f"
-    echo "$RESULT" | jq -r ".findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\"))) | \"  [\(.type)] \(.message)\"" 2>/dev/null
+# --- bandit: security ---
+if command -v bandit &>/dev/null; then
+  BANDIT_OUT=$(bandit -q -ll $STAGED 2>/dev/null)
+  BANDIT_EXIT=$?
+  if [ $BANDIT_EXIT -ne 0 ] && [ -n "$BANDIT_OUT" ]; then
+    BANDIT_COUNT=$(echo "$BANDIT_OUT" | grep -c 'Severity:')
+    echo "bandit BLOCKED: $BANDIT_COUNT security finding(s)"
+    echo "$BANDIT_OUT" | head -20
     FAILED=1
   fi
 
-  if [ "$ADVISORY" != "0" ] && [ -n "$ADVISORY" ]; then
-    echo "codetopo advisory: $ADVISORY other error(s) in $f (not blocking)"
-    echo "$RESULT" | jq -r ".findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\") | not)) | \"  [\(.type)] \(.message)\"" 2>/dev/null
+  # Advisory: low severity
+  BANDIT_LOW=$(bandit -q -l $STAGED 2>/dev/null | grep -c 'Severity:')
+  if [ "$BANDIT_LOW" -gt 0 ] 2>/dev/null; then
+    echo "bandit advisory: $BANDIT_LOW low-severity finding(s) (not blocking)"
   fi
-done
+fi
 
+# --- codetopo: structural topology ---
+CODETOPO=""
+PROJECT_DIR=$(git rev-parse --show-toplevel)
+if [ -x "$PROJECT_DIR/.venv/bin/codetopo" ]; then
+  CODETOPO="$PROJECT_DIR/.venv/bin/codetopo"
+elif command -v codetopo &>/dev/null; then
+  CODETOPO="codetopo"
+fi
+
+if [ -n "$CODETOPO" ]; then
+  BLOCKING_TYPES="structural_duplication|circular_dependency"
+
+  for f in $STAGED; do
+    RESULT=$($CODETOPO check "$f" --output json 2>/dev/null)
+
+    BLOCKING=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\")))] | length" 2>/dev/null)
+    ADVISORY=$(echo "$RESULT" | jq -r "[.findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\") | not))] | length" 2>/dev/null)
+
+    if [ "$BLOCKING" != "0" ] && [ -n "$BLOCKING" ]; then
+      echo "codetopo BLOCKED: $BLOCKING structural error(s) in $f"
+      echo "$RESULT" | jq -r ".findings[] | select(.severity == \"error\" and (.type | test(\"$BLOCKING_TYPES\"))) | \"  [\(.type)] \(.message)\"" 2>/dev/null
+      FAILED=1
+    fi
+
+    if [ "$ADVISORY" != "0" ] && [ -n "$ADVISORY" ]; then
+      echo "codetopo advisory: $ADVISORY other finding(s) in $f (not blocking)"
+    fi
+  done
+fi
+
+# --- Summary ---
 if [ "$FAILED" = "1" ]; then
   echo ""
-  echo "Commit blocked: structural duplication or circular dependency detected."
-  echo "Fix the issues above, or use --no-verify to skip."
+  echo "Commit blocked. Fix the issues above or use --no-verify to skip."
   exit 1
 fi
 
