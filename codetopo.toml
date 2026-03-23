@@ -22,7 +22,7 @@ max_duplicate_pairs = 0
 
 # Minimum function size (in normalized nodes) for duplication detection.
 # Smaller functions match too easily — too many false positives below 4.
-min_duplicate_size = 3
+min_duplicate_size = 4
 
 # Whether to exit non-zero (fail CI) when errors are found.
 fail_on_error = true

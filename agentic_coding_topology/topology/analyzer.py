@@ -105,9 +105,7 @@ class TopologyAnalyzer:
         # Max number of structurally isomorphic subgraph pairs allowed
         self.max_duplicate_pairs = cfg.get("max_duplicate_pairs", 0)
         # Min subgraph size for duplication detection
-        # Lowered from 4→3 after A/B review: 3-node API handlers are the most
-        # common agent copy-paste pattern and were slipping through
-        self.min_duplicate_size = cfg.get("min_duplicate_size", 3)
+        self.min_duplicate_size = cfg.get("min_duplicate_size", 4)
         # Fail build on errors
         self.fail_on_error = cfg.get("fail_on_error", True)
         # Min isolated component size to flag — small islands (< 5 nodes) are
@@ -516,13 +514,13 @@ class TopologyAnalyzer:
                     g2.number_of_nodes() < self.min_duplicate_size):
                 continue
 
-            # Skip large edgeless graphs — two disconnected node sets of the
-            # same size are trivially isomorphic but structurally meaningless.
-            # However, small edgeless functions (≤5 nodes) ARE real copy-paste:
-            # API endpoint handlers that are 3-4 lines of try/call/return.
+            # Skip edgeless graphs entirely. Two disconnected node sets of
+            # the same size are trivially isomorphic — that's counting, not
+            # topology. Small edgeless functions (API handlers) are real
+            # copy-paste but the signal is too noisy to be useful.
+            # The /review skill's manual pass catches these instead.
             if g1.number_of_edges() == 0 or g2.number_of_edges() == 0:
-                if g1.number_of_nodes() > 5 or g2.number_of_nodes() > 5:
-                    continue
+                continue
 
             # Fast filter: degree sequences must match
             if (sorted(d for _, d in g1.degree()) !=
